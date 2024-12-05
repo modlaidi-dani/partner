@@ -1,0 +1,1151 @@
+{% extends "base.html" %}
+{% load static  %}
+{% block extrastyle %}
+    .truck-button {
+        --color: #fff;
+        --background: #FF0C3B;
+        --tick: #16BF78;
+        --base: #0D0F18;
+        --wheel: #2B3044;
+        --wheel-inner: #646B8C;
+        --wheel-dot: #fff;
+        --back: #6D58FF;
+        --back-inner: #362A89;
+        --back-inner-shadow: #2D246B;
+        --front: #A6ACCD;
+        --front-shadow: #535A79;
+        --front-light: #FFF8B1;
+        --window: #2B3044;
+        --window-shadow: #404660;
+        --street: #646B8C;
+        --street-fill: #404660;
+        --box: #DCB97A;
+        --box-shadow: #B89B66;
+        padding: 12px 0;
+        width: 172px;
+        cursor: pointer;
+        text-align: center;
+        position: relative;
+        border: none;
+        outline: none;
+        color: var(--color);
+        background: var(--background);
+        border-radius: var(--br, 5px);
+        -webkit-appearance: none;
+        -webkit-tap-highlight-color: transparent;
+        transform-style: preserve-3d;
+        transform: rotateX(var(--rx, 0deg)) translateZ(0);
+        transition: transform .5s, border-radius .3s linear var(--br-d, 0s);
+        &:before,
+        &:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 6px;
+            display: block;
+            background: var(--b, var(--street));
+            transform-origin: 0 100%;
+            transform: rotateX(90deg) scaleX(var(--sy, 1));
+        }
+        &:after {
+            --sy: var(--progress, 0);
+            --b: var(--street-fill);
+        }
+        .default,
+        .success {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 24px;
+            opacity: var(--o, 1);
+            transition: opacity .3s;
+        }
+        .success {
+            --o: 0;
+            position: absolute;
+            top: 12px;
+            left: 0;
+            right: 0;
+            svg {
+                width: 12px;
+                height: 10px;
+                display: inline-block;
+                vertical-align: top;
+                fill: none;
+                margin: 7px 0 0 4px;
+                stroke: var(--tick);
+                stroke-width: 2;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                stroke-dasharray: 16px;
+                stroke-dashoffset: var(--offset, 16px);
+                transition: stroke-dashoffset .4s ease .45s;
+            }
+        }
+        .truck {
+            position: absolute;
+            width: 72px;
+            height: 28px;
+            transform: rotateX(90deg) translate3d(var(--truck-x, 4px), calc(var(--truck-y-n, -26) * 1px), 12px);
+            &:before,
+            &:after {
+                content: '';
+                position: absolute;
+                bottom: -6px;
+                left: var(--l, 18px);
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                z-index: 2;
+                box-shadow: inset 0 0 0 2px var(--wheel), inset 0 0 0 4px var(--wheel-inner);
+                background: var(--wheel-dot);
+                transform: translateY(calc(var(--truck-y) * -1px)) translateZ(0);
+            }
+            &:after {
+                --l: 54px;
+            }
+            .wheel,
+            .wheel:before {
+                position: absolute;
+                bottom: var(--b, -6px);
+                left: var(--l, 6px);
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: var(--wheel);
+                transform: translateZ(0);
+            }
+            .wheel {
+                transform: translateY(calc(var(--truck-y) * -1px)) translateZ(0);
+            }
+            .wheel:before {
+                --l: 35px;
+                --b: 0;
+                content: '';
+            }
+            .front,
+            .back,
+            .box {
+                position: absolute;
+            }
+            .back {
+                left: 0;
+                bottom: 0;
+                z-index: 1;
+                width: 47px;
+                height: 28px;
+                border-radius: 1px 1px 0 0;
+                background: linear-gradient(68deg, var(--back-inner) 0%, var(--back-inner) 22%, var(--back-inner-shadow) 22.1%, var(--back-inner-shadow) 100%);
+                &:before,
+                &:after {
+                    content: '';
+                    position: absolute;
+                }
+                &:before {
+                    left: 11px;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    z-index: 2;
+                    border-radius: 0 1px 0 0;
+                    background: var(--back);
+                }
+                &:after {
+                    border-radius: 1px;
+                    width: 73px;
+                    height: 2px;
+                    left: -1px;
+                    bottom: -2px;
+                    background: var(--base);
+                }
+            }
+            .front {
+                left: 47px;
+                bottom: -1px;
+                height: 22px;
+                width: 24px;
+                -webkit-clip-path: polygon(55% 0, 72% 44%, 100% 58%, 100% 100%, 0 100%, 0 0);
+                clip-path: polygon(55% 0, 72% 44%, 100% 58%, 100% 100%, 0 100%, 0 0);
+                background: linear-gradient(84deg, var(--front-shadow) 0%, var(--front-shadow) 10%, var(--front) 12%, var(--front) 100%);
+                &:before,
+                &:after {
+                    content: '';
+                    position: absolute;
+                }
+                &:before {
+                    width: 7px;
+                    height: 8px;
+                    background: #fff;
+                    left: 7px;
+                    top: 2px;
+                    -webkit-clip-path: polygon(0 0, 60% 0%, 100% 100%, 0% 100%);
+                    clip-path: polygon(0 0, 60% 0%, 100% 100%, 0% 100%);
+                    background: linear-gradient(59deg, var(--window) 0%, var(--window) 57%, var(--window-shadow) 55%, var(--window-shadow) 100%)
+                }
+                &:after {
+                    width: 3px;
+                    height: 2px;
+                    right: 0;
+                    bottom: 3px;
+                    background: var(--front-light);
+                }
+            }
+            .box {
+                width: 13px;
+                height: 13px;
+                right: 56px;
+                bottom: 0;
+                z-index: 1;
+                border-radius: 1px;
+                overflow: hidden;
+                transform: translate(calc(var(--box-x, -24) * 1px), calc(var(--box-y, -6) * 1px)) scale(var(--box-s, .5));
+                opacity: var(--box-o, 0);
+                background: linear-gradient(68deg, var(--box) 0%, var(--box) 50%, var(--box-shadow) 50.2%, var(--box-shadow) 100%);
+                background-size: 250% 100%;
+                background-position-x: calc(var(--bx, 0) * 1%);
+                &:before,
+                &:after {
+                    content: '';
+                    position: absolute;
+                }
+                &:before {
+                    content: '';
+                    background: rgba(white, .2);
+                    left: 0;
+                    right: 0;
+                    top: 6px;
+                    height: 1px;
+                }
+                &:after {
+                    width: 6px;
+                    left: 100%;
+                    top: 0;
+                    bottom: 0;
+                    background: var(--back);
+                    transform: translateX(calc(var(--hx, 0) * 1px));
+                }
+            }
+        }
+        &.animation {
+            --rx: -90deg;
+            --br: 0;
+            .default {
+                --o: 0;
+            }
+            &.done {
+                --rx: 0deg;
+                --br: 5px;
+                --br-d: .2s;
+                .success {
+                    --o: 1;
+                    --offset: 0;
+                }
+            }
+        }
+    }
+    .badge-area-show {
+        width: 500px;
+        height: 500px;
+        margin: 0 auto;
+        background: #666;
+        position: relative;
+      }
+      
+      .bagde-flag-wrap {
+            position: absolute;
+          top: 20px;
+          left: -12px;
+      }
+      
+      .bagde-flag-wrap::before {
+          content: "";
+          position: absolute;
+          top: 35px;
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 0 12px 12px 0;
+          border-color: transparent #ecb41c transparent transparent;
+      }
+      
+      .bagde-flag {
+          text-transform: capitalize;
+          color: #ffffff;
+          background: #ecb41c;
+          letter-spacing: 0;
+          font-size: 14px;
+          line-height: 15px;
+          font-weight: 600;
+          padding: 10px 15px;
+          display: block;
+        text-decoration: none;
+      }
+      
+
+{% endblock extrastyle %}
+{% block content %}
+<div 
+    x-data="{ 
+        menuOpen: false, 
+        basicSignInModal: false,
+        basicSignUpModal: false,
+        advanceSignInModal: false,
+        advanceSignUpModal: false,
+    }" 
+    class="w-full"
+    >
+    <!-- start::Black overlay -->
+    <div :class="menuOpen ? 'block' : 'hidden'" @click="menuOpen = false" class="fixed  inset-0 bg-white opacity-50 transition-opacity lg:hidden"></div>
+    <!-- end::Black overlay -->
+    {% include 'header.html' %}
+        <div class="w-full flex flex-row">
+            {% include "sidebar.html" %}
+            <div class="h-full overflow-auto w-full">
+                <!-- Main content header -->
+                    <main class="w-full h-full overflow-hidden" >
+                        <section 
+                            class="sales" 
+                            id="sales-view"
+                            x-data="salesView">
+                            <div class="w-full px-4 bg-auto bg-no-repeat bg-center">
+                                <div class="bg-white/30 h-screen bg-center bg-no-repeat backdrop-blur-sm" >
+                                    <div class="py-2 mt-4 flex flex-wrap flex-grow justify-between border-b px-2">  
+                                        <div>
+                                            <h3 class="text-3xl uppercase font-bold text-primary ">Page de Produits </h3>
+                                        </div>  
+                                    </div> 
+                                    <div id="summary" class=" rounded-lg  bg-white/30 shadow-lg  w-full px-3 py-2">
+                                        <div>
+                                            <div class="flex justify-between border-b py-4">
+                                                <h1 class=" TextGradient font-bold uppercase text-2xl ">Formulaire de Commande</h1>
+                                                <div class="flex space-x-2 items-center ">
+                                                    <h2 class="font-semibold text-lg" x-show="Commandeitems.length >0" x-text="Commandeitems.length +'  Produits'"></h2>
+                                                    <button @click="showSummary = !showSummary" class="text-gray-700 cursor-pointer">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                            <path  x-show="!showSummary"  stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                                            <path x-show="showSummary" stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                                                        </svg>			
+                                                    </button>
+                                                </div>
+                                            </div>    
+                                        </div>
+                                        <div class="" x-show="showSummary">
+                                            <div class="flex mt-10 mb-5 border-b">
+                                                <h3 class="font-semibold text-md uppercase w-2/5">Produit</h3>
+                                                <h3 class="text-center font-semibold text-md uppercase w-1/5">Qté</h3>
+                                                <h3 class="text-center font-semibold text-md uppercase w-1/5">Prix</h3>
+                                                <h3 class="text-center font-semibold text-md uppercase w-1/5">Total</h3>
+                                                <h3 class="text-center font-semibold text-md uppercase "></h3>
+                                            </div>
+                                            <div class="max-h-24 w-full overflow-y-auto overflow-x-hidden">
+                                                <template x-for="item in Commandeitems">
+                                                    <div class="flex items-center py-5">
+                                                        <!-- product --> 
+                                                        <div class="flex w-2/5">                                                             
+                                                            <div class="flex flex-col  flex-grow">
+                                                                <span class="font-bold text-md" x-text="item.name"></span>
+                                                                <span class="font-bold  text-md" x-text="item.reference"></span>                                                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex justify-center w-1/5">
+                                                            <svg class="fill-current text-gray-600 w-3 cursor-pointer" viewBox="0 0 448 512"
+                                                                x-on:click="
+                                                                    if (item.qty -1 < item.qtyMin){
+                                                                        alert('Veuillez Introduire Une Quantité Supèrieure ou égale à la Quantité Minimale');
+                                                                        return;
+                                                                    }else{
+                                                                        item.qty= item.qty -1    
+                                                                    }                                                                                
+                                                                "
+                                                            >
+                                                                <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"/>
+                                                            </svg>
+                                                            <input class="mx-2 border text-center w-8" type="text" :value="item.qty">                                                             
+                                                            <svg class="fill-current text-gray-600 w-3 cursor-pointer" viewBox="0 0 448 512" x-on:click="item.qty= item.qty + 1">
+                                                                <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"/>
+                                                            </svg>
+                                                        </div>
+                                                        <span class="text-center w-1/5 font-semibold text-sm" x-text="item.prix"></span>
+                                                        <span class="text-center w-1/5 font-semibold text-sm" x-text="item.prix * item.qty"></span>
+                                                        <a @click.prevent="deleteItem(item.reference)" class="font-semibold text-red-500 hover:text-red-700 text-xs cursor-pointer">X</a>
+                                                    </div>
+                                                </template>
+                                            </div>                                                              
+                                            <div class="border-t mt-8">
+                                                <div class="flex font-semibold justify-end py-6 border-b  uppercase text-lg text-red-500">
+                                                    <span class="font-bold mr-4">TOTAL TTC :</span>
+                                                    <span  x-text="TotalSum() +' DZD'"></span>
+                                                </div>
+                                                <div class="flex flex-col py-2 pb-4 border-b uppercase text-lg">
+                                                    <span class="font-bold">Note :</span>
+                                                    <textarea x-model="note" class="px-2 bg-white border" placeholder="Laisser une note ...">                                                                   
+                                                    </textarea>
+                                                </div>
+                                                <button class="truck-button hover:shadow-lg mt-2 mx-auto justify-end"
+                                                    x-bind:disabled="Commandeitems.length == 0"
+                                                    :class="{'bg-gray-150 cursor-not-allowed': Commandeitems.length == 0}"
+                                                    @click.prevent="PasserCommande()">
+                                                    <span class="default">Valider</span>
+                                                    <span class="success">
+                                                        Commande Passée
+                                                        <svg viewbox="0 0 12 10">
+                                                            <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                                        </svg>
+                                                    </span>
+                                                    <div class="truck">
+                                                        <div class="wheel"></div>
+                                                        <div class="back"></div>
+                                                        <div class="front"></div>
+                                                        <div class="box"></div>
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    
+                                    <div class="flex-none border-t mt-4 w-full max-w-full h-screen backdrop-blur-md  ">
+                                        <div class="py-2 px-3 flex justify-between items-center border-b">   
+                                            <div class="">
+                                                <h3 class="text-2xl uppercase font-bold text-primary ">Liste des Produits</h3>                                               
+                                            </div>                                                           
+                                            <div class="py-2 flex space-x-1">  
+                                                <div class="relative mr-4 inline-block" x-data="{showTooltip1 :false}">
+                                                    <div class="text-gray-500 cursor-pointer w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-300 inline-flex items-center justify-center" @mouseenter="showTooltip1 = true" @mouseleave="showTooltip1 = false" @click="exportExcelStock">
+                                                    <svg id='file-spreadsheet_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                                                        <g transform="matrix(1 0 0 1 12 12)" >
+                                                        <g style="" >
+                                                        <g transform="matrix(1 0 0 1 0 0)" >
+                                                        <path style="stroke: none; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 0 0 L 24 0 L 24 24 L 0 24 z" stroke-linecap="round" />
+                                                        </g>
+                                                        <g transform="matrix(1 0 0 1 4 -7)" >
+                                                        <path style="stroke: rgb(17,156,29); stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-16.5, -5.5)" d="M 14 3 L 14 7 C 14 7.552284749830793 14.447715250169207 8 15 8 L 19 8" stroke-linecap="round" />
+                                                        </g>
+                                                        <g transform="matrix(1 0 0 1 -0.5 -0.5)" >
+                                                        <path style="stroke: rgb(17,156,29); stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 17 21 L 7 21 C 5.8954305003384135 21 5 20.104569499661586 5 19 L 5 5 C 5 3.895430500338413 5.8954305003384135 3 7 3 L 14 3 L 19 8 L 19 19 C 19 20.104569499661586 18.104569499661586 21 17 21 z" stroke-linecap="round" />
+                                                        </g>
+                                                        <g transform="matrix(1 0 0 1 -0.5 2)" >
+                                                        <path style="stroke: rgb(17,156,29); stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -14.5)" d="M 8 11 L 16 11 L 16 18 L 8 18 z" stroke-linecap="round" />
+                                                        </g>
+                                                        <g transform="matrix(1 0 0 1 -0.5 2.5)" >
+                                                        <path style="stroke: rgb(17,156,29); stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -15)" d="M 8 15 L 16 15" stroke-linecap="round" />
+                                                        </g>
+                                                        <g transform="matrix(1 0 0 1 -1.5 2)" >
+                                                        <path style="stroke: rgb(17,156,29); stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-11, -14.5)" d="M 11 11 L 11 18" stroke-linecap="round" />
+                                                        </g>
+                                                        </g>
+                                                        </g>
+                                                    </svg>			  
+                                                    </div>
+                                                    <div x-show.transition="showTooltip1" class="z-40 bgGradient shadow-lg text-center w-32 block absolute left-0 top-0 p-2 mt-12 rounded-lg  text-white text-xs">
+                                                    Exporter Ficher Produits!
+                                                    </div>
+                                                </div> 
+                                                <div class="relative mr-4 inline-block" x-data="{showTooltip1 :false}">
+                                                    <label class="text-gray-500 cursor-pointer w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-300 inline-flex items-center justify-center" @mouseenter="showTooltip1 = true" @mouseleave="showTooltip1 = false">
+                                                    <svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                        <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+                                                    </svg>	  
+                                                    <input type="file" class="hidden" accept=".xlsx" x-ref="fileInput" x-on:change="handleFileChange">
+                                                    </label>
+                                                    <div x-show.transition="showTooltip1" class="z-40 shadow-lg text-center w-32 block absolute right-2 top-0 p-2 mt-12 rounded-lg bgGradient text-white text-xs">
+                                                        Modifier Liste Des Produits!
+                                                    </div>
+                                                </div>
+                                                <div class="relative mr-4 inline-block" x-data="{showTooltip :false}">
+                                                    <div class="text-gray-500 cursor-pointer w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-300 inline-flex items-center justify-center" @mouseenter="showTooltip = true" @mouseleave="showTooltip = false" @click="printInvoice()">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-printer" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                            <rect x="0" y="0" width="24" height="24" stroke="none"></rect>
+                                                            <path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" />
+                                                            <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" />
+                                                            <rect x="7" y="13" width="10" height="8" rx="2" />
+                                                        </svg>				  
+                                                    </div>
+                                                    <div x-show.transition="showTooltip" class="z-40 shadow-lg text-center w-32 block absolute right-2 top-0 p-2 mt-12 rounded-lg bgGradient text-white text-xs">
+                                                        Exporter En PDF / Imprimer!
+                                                    </div>
+                                                </div>
+                                                <div>				  
+                                                    <div class="relative inline-block" x-data="{showTooltip2 :false}">
+                                                      <div class="text-gray-500 cursor-pointer w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-300 inline-flex items-center justify-center" @mouseenter="showTooltip2 = true" @mouseleave="showTooltip2 = false" @click="openPreview=true">
+                                                          <svg id='eye_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                                                                  <g transform="matrix(1 0 0 1 12 12)" >
+                                                                  <g style="" >
+                                                                  <g transform="matrix(1 0 0 1 0 0)" >
+                                                                  <path style="stroke: none; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 0 0 L 24 0 L 24 24 L 0 24 z" stroke-linecap="round" />
+                                                                  </g>
+                                                                  <g transform="matrix(1 0 0 1 -0.25 -0.25)" >
+                                                                  <circle style="stroke: rgb(0,0,0); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" cx="0" cy="0" r="2" />
+                                                                  </g>
+                                                                  <g transform="matrix(1 0 0 1 -0.25 -0.25)" >
+                                                                  <path style="stroke: rgb(0,0,0); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 22 12 C 19.333 16.667 16 19 12 19 C 8 19 4.667 16.667 2 12 C 4.667 7.333 8 5 12 5 C 16 5 19.333 7.333 22 12" stroke-linecap="round" />
+                                                                  </g>
+                                                                  </g>
+                                                                  </g>
+                                                          </svg>		  
+                                                      </div>
+                                                      <div x-show.transition="showTooltip2" class="z-40 shadow-lg text-center w-32 block absolute right-2 top-0 p-2 mt-12 rounded-lg bgGradient text-white text-xs">
+                                                          Preview
+                                                      </div>
+                                                    </div>
+                                                </div> 
+                                            </div>   
+                                        </div> 
+                                        <div class="rounded-lg px-2 py-4 mb-12 " >
+                                                <div class="relative flex flex-col rounded-lg shadow-xs overflow-hidden">         
+                                                    <div class="flex space-x-8 bg-white border-b border-gray-200 ">
+                                                        <button
+                                                            type="button"
+                                                            class="focus:outline-none  py-2 px-1  text-md tracking-wide font-semibold border-transparent"
+                                                            x-on:click="filter = 'all'; console.log(filter);"
+                                                            :class="{ 'TextGradient border-b-2 border-[#ff0c3b]': filter === 'all' }"
+                                                        >
+                                                            Tous les Produits
+                                                        </button>
+                                                        <template x-for="item in brands">
+                                                            <button
+                                                                type="button"
+                                                                class="focus:outline-none  py-2 px-1  text-md tracking-wide font-semibold border-transparent"
+                                                                x-on:click="filter = item; console.log(filter);"
+                                                                :class="{'TextGradient border-b-2 border-[#ff0c3b]': filter === item }"
+                                                                x-text="item"
+                                                            >                                                       
+                                                            </button>
+                                                        </template>                                                    
+                                                    </div>     
+                                                    <div class="h-full">
+                                                        <div class="font-sans  text-black  bg-white flex items-center justify-start py-2">
+                                                            <div class="border rounded overflow-hidden flex">
+                                                              <input type="text" class="px-4 py-2" placeholder="Recherche ..." x-model="search">
+                                                              <button class="flex items-center justify-center px-4 border-l">
+                                                                <svg class="h-4 w-4 text-grey-dark" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/></svg>
+                                                              </button>
+                                                            </div>
+                                                          </div>
+                                                        <div class="rounded-lg flex flex-col py-2 overflow-y-auto custom-scrollbar mb-12 backdrop-blur-sm bg-white/30 bg-center bg-no-repeat"  style="background-image:url('{% static 'images/bg_produits.png' %}');" > 
+                                                            <table class="w-full  mb-0  border-gray-200 text-black " >
+                                                                <thead class=" border-b-2 bg-gray-100">   
+                                                                    <td></td>                                                                                 
+                                                                    <td class="px-6 flex items-center  max-w-md py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-sm border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                        
+                                                                        <span>Designation</span>
+                                                                        
+                                                                    </td>
+                                                                    <td class="px-6 max-w-md py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-sm border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                        Etat 
+                                                                    </td>
+                                                                    <td class="px-6 max-w-md py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-sm border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                        Prix Vente TTC 
+                                                                    </td>                                                          
+                                                                    <td class="px-6 max-w-md py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-sm border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                        Marge Public Conseillée 
+                                                                    </td>                                                          
+                                                                    <td class="px-6 max-w-md py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-sm border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                        Quantité Par Cartons 
+                                                                    </td>                                                          
+                                                                    <td class="px-6 max-w-md py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-sm border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                        Quantité Minimale à Acheter
+                                                                    </td>                                                          
+                                                                    {% comment %} <td class="px-6 max-w-md py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-sm border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                        Lien
+                                                                    </td> {% endcomment %}
+                                                                    <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-sm border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70"></td>
+                                                                </thead>
+                                                                <tbody class="text-md  " >
+                                                                    <template x-for="(produit, index) in filteredAndPaginatedProducts">
+                                                                        <tr class="hover:shadow-lg border-b transition duration-200" x-show="productMatches(produit.reference, produit.name)">
+                                                                            <td>
+                                                                                {% if request.session.role == 'Administrateur' %}  
+                                                                                    <input class=" border-l-0 border-r-0 text-sm whitespace-nowrap" type="checkbox" :value="produit.id" x-model="selectedItems">
+                                                                                {% endif %}
+                                                                            </td>
+                                                                            <td class="pl-2 text-center " x-text="produit.name">
+                                                                            </td>
+                                                                            <td class="py-4 pl-2   text-center" x-text="produit.etat"></td>                                                                      
+                                                                            <td class="py-4 pl-2 text-center" x-text="produit.prix"></td>
+                                                                            <td class="py-4 pl-2  text-center" x-text="produit.marge"></td>
+                                                                            <td class="flex items-center ">
+                                                                                <div class="mx-auto relative ">
+                                                                                    <span class="absolute font-bold text-sm skew-y-10" style="color: #bb7c23; top: 2.4em; left: 0.95rem;" x-text="produit.quantityPerCarton"></span>
+                                                                                    <svg fill="#bb7c23" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="65px" height="65px" viewBox="-61.2 -61.2 734.40 734.40" xml:space="preserve" transform="matrix(-1, 0, 0, 1, 0, 0)rotate(0)" stroke="#ae8f13">
+                                                                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                                                        <g id="SVGRepo_iconCarrier"> 
+                                                                                            <g> 
+                                                                                                <path d="M305.058,329.286V570.82l192.293-36.491V416.644c0-4.926,4.291-8.752,9.185-8.19l23.658,3.661 c4.162,0.478,7.305,4.001,7.305,8.19v136.717c0,3.885-2.713,7.243-6.512,8.061l-210.5,45.261 c-10.172,2.188-20.691,2.211-30.873,0.069L81.373,566.609c-3.738-0.786-6.446-4.037-6.545-7.854L71.23,419.907 c-0.112-4.354,3.181-8.046,7.521-8.427l176.886-15.543c3.068-0.269,5.73-2.226,6.902-5.074l26.648-64.716 C292.628,317.796,305.058,320.254,305.058,329.286z M69.23,250.204L13.721,368.855c-2.713,5.798,1.928,12.34,8.297,11.697 l208.464-21.064c2.946-0.298,5.505-2.152,6.707-4.858l67.075-151.111l-229.056,42.07C72.587,246.071,70.36,247.79,69.23,250.204z M304.264,203.518l70.976,155.837c1.24,2.723,3.859,4.561,6.842,4.801l208.069,16.732c6.271,0.505,10.773-5.916,8.163-11.64 L544.05,250.284c-1.122-2.46-3.38-4.213-6.041-4.692L304.264,203.518z M245.942,80.473l51.515,89.207 c3.967,6.869,13.882,6.868,17.848,0l51.504-89.207c3.967-6.87-0.991-15.457-8.923-15.457h-25.748v-54.71 C332.138,4.614,327.525,0,321.833,0h-30.914c-5.691,0-10.305,4.614-10.305,10.305v54.71h-25.749 C246.933,65.015,241.975,73.603,245.942,80.473z">                                                                                               
+                                                                                                </path> 
+                                                                                            </g> 
+                                                                                        </g>
+                                                                                    </svg>
+                                                                                </div>
+                                                                            </td>                                                                    
+                                                                            <td class="mx-auto text-center" x-text="produit.quantityMinimum"></td>
+                                                                            <td class="py-4 px-2 ">                                                            
+                                                                                        <a
+                                                                                            @click.prevent="
+                                                                                                if (item.qty == 0){
+                                                                                                    alert('Veuillez Effectuer Une quantité Supérieure à la quantité Minimal');
+                                                                                                    return
+                                                                                                }else{
+                                                                                                    addItem(produit.name, produit.prix, produit.quantityMinimum)
+                                                                                                }
+                                                                                            "
+                                                                                            class="px-5 py-1 cursor-pointer text-[#ff0c3b] hover:text-white hover:bg-gradient-to-t to-[#ff0c3b] from-[#93291E] focus:outline-none border  border-solid text-sm text-center font-semibold uppercase tracking-widest overflow-hidden" 
+                                                                                        >
+                                                                                            Commander
+                                                                                        </a>
+                                                                            </td>                                                              
+                                                                        </tr>
+                                                                    </template>
+                                                                </tbody>
+                                                            </table>   
+                                                            <div class="flex bg-gray-100 justify-between ">
+                                                                <div class="transition-transform cursor-pointer  py-1 text-red-500 hover:text-red-700" @click="confirmDelete()" >
+                                                                    {% if request.session.role == 'Administrateur' %} 
+                                                                        <svg id='trash-x_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                                                                            <g transform="matrix(1 0 0 1 12 12)" >
+                                                                            <g style="" >
+                                                                            <g transform="matrix(1 0 0 1 0 0)" >
+                                                                            <path style="stroke: none; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 0 0 L 24 0 L 24 24 L 0 24 z" stroke-linecap="round" />
+                                                                            </g>
+                                                                            <g transform="matrix(1 0 0 1 -0.25 -5.25)" >
+                                                                            <path style="stroke: rgb(249,10,10); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -7)" d="M 4 7 L 20 7" stroke-linecap="round" />
+                                                                            </g>
+                                                                            <g transform="matrix(1 0 0 1 -0.25 1.75)" >
+                                                                            <path style="stroke: rgb(249,10,10); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -14)" d="M 5 7 L 6 19 C 6 20.104569499661586 6.8954305003384135 21 8 21 L 16 21 C 17.104569499661586 21 18 20.104569499661586 18 19 L 19 7" stroke-linecap="round" />
+                                                                            </g>
+                                                                            <g transform="matrix(1 0 0 1 -0.25 -7.25)" >
+                                                                            <path style="stroke: rgb(249,10,10); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -5)" d="M 9 7 L 9 4 C 9 3.4477152501692068 9.447715250169207 3 10 3 L 14 3 C 14.552284749830793 3 15 3.4477152501692063 15 4 L 15 7" stroke-linecap="round" />
+                                                                            </g>
+                                                                            <g transform="matrix(1 0 0 1 -0.25 1.75)" >
+                                                                            <path style="stroke: rgb(249,10,10); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -14)" d="M 10 12 L 14 16 M 14 12 L 10 16" stroke-linecap="round" />
+                                                                            </g>
+                                                                            </g>
+                                                                            </g>
+                                                                        </svg>
+                                                                    {% endif %}
+                                                                </div>
+                                                                 <div class="flex justify-start">
+                                                                     <button
+                                                                         x-bind:disabled="currentPage === 1"
+                                                                         @click="prevPage"
+                                                                     >
+                                                                     <svg id='chevrons-left_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                                                                             <g transform="matrix(1 0 0 1 12 12)" >
+                                                                             <g style="" >
+                                                                             <g transform="matrix(1 0 0 1 0 0)" >
+                                                                             <path style="stroke: none; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 0 0 L 24 0 L 24 24 L 0 24 z" stroke-linecap="round" />
+                                                                             </g>
+                                                                             <g transform="matrix(1 0 0 1 -3.75 -0.25)" >
+                                                                             <polyline style="stroke: rgb(0,0,0); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" points="2.5,-5 -2.5,0 2.5,5 " />
+                                                                             </g>
+                                                                             <g transform="matrix(1 0 0 1 2.25 -0.25)" >
+                                                                             <polyline style="stroke: rgb(0,0,0); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" points="2.5,-5 -2.5,0 2.5,5 " />
+                                                                             </g>
+                                                                             </g>
+                                                                             </g>
+                                                                     </svg>
+                                                                     </button>
+                                                                     <p class=" text-lg px-2" x-text="currentPage"></p> /<p id="total-pages" class=" text-lg px-2" x-text="totalPages"></p>
+                                                                     <button
+                                                                         x-bind:disabled="currentPage === totalPages"
+                                                                         @click="nextPage"
+                                                                     >
+                                                                         <svg id='chevrons-right_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                                                                                 <g transform="matrix(1 0 0 1 12 12)" >
+                                                                                 <g style="" >
+                                                                                 <g transform="matrix(1 0 0 1 0 0)" >
+                                                                                 <path style="stroke: none; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 0 0 L 24 0 L 24 24 L 0 24 z" stroke-linecap="round" />
+                                                                                 </g>
+                                                                                 <g transform="matrix(1 0 0 1 -2.75 -0.25)" >
+                                                                                 <polyline style="stroke: rgb(0,0,0); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" points="-2.5,-5 2.5,0 -2.5,5 " />
+                                                                                 </g>
+                                                                                 <g transform="matrix(1 0 0 1 3.25 -0.25)" >
+                                                                                 <polyline style="stroke: rgb(0,0,0); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" points="-2.5,-5 2.5,0 -2.5,5 " />
+                                                                                 </g>
+                                                                                 </g>
+                                                                                 </g>
+                                                                         </svg>
+                                                                     </button>
+                                                                  </div>
+                                                             </div>                                                        
+                                                            
+                                                        </div>    
+                                                    </div>     
+                                                </div>     
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style=" background-color: rgba(0, 0, 0, 0.8)" class="fixed z-40 top-0 overflow-y-scroll right-0 left-0 bottom-0 h-full w-full py-8" x-show.transition.opacity="openPreview">	
+                                        <div class="shadow absolute -right-0 top-0 w-10 h-10 rounded-full bg-white text-gray-500 hover:text-gray-800 inline-flex  items-center justify-center cursor-pointer"
+                                             x-on:click="openPreview = !openPreview">
+                                             <svg class="fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                 <path
+                                                     d="M16.192 6.344L11.949 10.586 7.707 6.344 6.293 7.758 10.535 12 6.293 16.242 7.707 17.656 11.949 13.414 16.192 17.656 17.606 16.242 13.364 12 17.606 7.758z" />
+                                             </svg>
+                                        </div>
+                                        <div class="p-4 w-1/3 mx-auto relative left-0 right-0 overflow-auto bg-white h-full" style="width: 793.7px; height: 1122.5px;"  x-on:click.away="openPreview = !openPreview">
+                                            <div class="py-4 border-b-2 border-gray-100">
+                                                <img src="{% static 'images/logos_header.png' %}" alt="" style="width: 793.7px;">                                               
+                                            </div>
+                                            <div class="py-4 border-b border-stone-500">                                                
+                                                <h2 class="text-3xl font-bold text-center pb-2 tracking-wider uppercase">Catalogue De Produits</h2>
+                                            </div>
+                                            <div class="container grid grid-cols-2 space-x-2 px-2 " style="cursor: auto;">
+                                                <template x-for="item in data_arry">
+                                                    <div class="w-full flex flex-col px-1  border-red-600">
+                                                        
+                                                        <div class="flex items-center space-x-1 ">
+                                                            <img alt="Product" class=" object-cover object-center rounded" :src="item.image1" style="cursor: auto; width: 180px; height: 180px;">
+                                                            <img alt="Product" class=" object-cover object-center rounded" :src="item.image2" style="cursor: auto; width: 180px; height: 180px;">
+                                                        </div>
+                                                        <h2 class="bgGradient w-fit top-4 p-2 text-sm title-font text-white tracking-widest" style="cursor: auto;">Disponible En Configuration</h2>
+                                                        <div class="w-full mt-6 lg:mt-0" style="cursor: auto;">
+                                                        <h1 class="text-gray-900 text-xl title-font font-medium mb-1" style="cursor: auto;" x-text="item.name"></h1>                                                     
+                                                        <p class="leading-relaxed" x-text="item.description"></p> 
+                                                        <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
+                                                            <div class="flex">
+                                                                <span class="title-font font-medium text-2xl TextGradient" x-text="item.prix + 'DZD'"></span>                                                           
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>                                                
+                                        </div>
+                                    </div>
+                     
+                                     <!-- Print Template -->
+                                     <div id="js-print-template" x-ref="printTemplate" class="hidden">                                       
+                                        <div class="p-4 w-full relative left-0 right-0 overflow-hidden  bg-white h-full"  x-on:click.away="openPreview = !openPreview">
+                                            <div class="py-4 border-b-2 border-gray-100">
+                                                <img src="{% static 'images/logos_header.png' %}" alt="" style="width: 793.7px;">                                               
+                                            </div>
+                                            <div class="py-1 border-b border-stone-500">
+                                                <h2 class="text-3xl font-bold text-center pb-2 tracking-wider uppercase">Catalogue De Produits</h2>
+                                            </div>
+                                            <div class="container grid grid-cols-2 space-x-2 px-2 " style="cursor: auto;">
+                                                <template x-for="item in filteredProducts">
+                                                    <div class="w-full flex flex-col px-1  border-red-600">
+                                                        
+                                                        <div class="flex items-center space-x-1 ">
+                                                            <img alt="Product" class=" object-cover object-center rounded" :src="item.image1" style="cursor: auto; width: 150px; height: 150px;">
+                                                            <img alt="Product" class=" object-cover object-center rounded" :src="item.image2" style="cursor: auto; width: 150px; height: 150px;">
+                                                        </div>
+                                                        <h2 class="bgGradient w-fit top-4 p-2 text-sm title-font text-white tracking-widest" style="cursor: auto;">Disponible En Configuration</h2>
+                                                        <div class="w-full mt-6 lg:mt-0" style="cursor: auto;">
+                                                        <h1 class="text-gray-900 text-md title-font font-medium mb-1" style="cursor: auto;" x-text="item.name"></h1>                                                     
+                                                        <p class="leading-relaxed" x-text="item.description"></p> 
+                                                        <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
+                                                            <div class="flex">
+                                                                <span class="title-font font-medium text-2xl TextGradient" x-text="item.prix + 'DZD'"></span>                                                           
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>                                                
+                                        </div>
+                                               
+                                                
+                                      </div>
+                                     <!-- /Print Template -->    
+                            </div>
+                            <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+                            <script>
+                                document.querySelectorAll('.truck-button').forEach(button => {
+                                    button.addEventListener('click', e => {                                
+                                        e.preventDefault();                                       
+                                        let box = button.querySelector('.box'),
+                                        truck = button.querySelector('.truck');                                        
+                                        if(!button.classList.contains('done')) {
+                                            
+                                            if(!button.classList.contains('animation')) {
+                                
+                                                button.classList.add('animation');
+                                
+                                                gsap.to(button, {
+                                                    '--box-s': 1,
+                                                    '--box-o': 1,
+                                                    duration: .3,
+                                                    delay: .5
+                                                });
+                                
+                                                gsap.to(box, {
+                                                    x: 0,
+                                                    duration: .4,
+                                                    delay: .7
+                                                });
+                                
+                                                gsap.to(button, {
+                                                    '--hx': -5,
+                                                    '--bx': 50,
+                                                    duration: .18,
+                                                    delay: .92
+                                                });
+                                
+                                                gsap.to(box, {
+                                                    y: 0,
+                                                    duration: .1,
+                                                    delay: 1.15
+                                                });
+                                
+                                                gsap.set(button, {
+                                                    '--truck-y': 0,
+                                                    '--truck-y-n': -26
+                                                });
+                                
+                                                gsap.to(button, {
+                                                    '--truck-y': 1,
+                                                    '--truck-y-n': -25,
+                                                    duration: .2,
+                                                    delay: 1.25,
+                                                    onComplete() {
+                                                        gsap.timeline({
+                                                            onComplete() {
+                                                                button.classList.add('done');
+                                                            }
+                                                        }).to(truck, {
+                                                            x: 0,
+                                                            duration: .4
+                                                        }).to(truck, {
+                                                            x: 40,
+                                                            duration: 1
+                                                        }).to(truck, {
+                                                            x: 20,
+                                                            duration: .6
+                                                        }).to(truck, {
+                                                            x: 96,
+                                                            duration: .4
+                                                        });
+                                                        gsap.to(button, {
+                                                            '--progress': 1,
+                                                            duration: 2.4,
+                                                            ease: "power2.in"
+                                                        });
+                                                    }
+                                                });
+                                                
+                                            }
+                                            
+                                        } else {
+                                            button.classList.remove('animation', 'done');
+                                            gsap.set(truck, {
+                                                x: 4
+                                            });
+                                            gsap.set(button, {
+                                                '--progress': 0,
+                                                '--hx': 0,
+                                                '--bx': 0,
+                                                '--box-s': .5,
+                                                '--box-o': 0,
+                                                '--truck-y': 0,
+                                                '--truck-y-n': -26
+                                            });
+                                            gsap.set(box, {
+                                                x: -24,
+                                                y: -6
+                                            });
+                                        }
+                                
+                                    });
+                                });
+                                function salesView(){
+                                    return{
+                                        Commandeitems:[],
+                                        selectedItems:[],
+                                        openPreview:false,
+
+                                        note:'',
+                                        filter:'all',
+                                        search:'',
+                                        item:{
+                                            reference:'',
+                                            name:'',
+                                            qty:0,
+                                            prix:0,     
+                                        },
+                                        brands: {{marques | safe}},
+                                        showSummary:false,
+                                        currentPage: 1,
+                                        pageSize: 10,
+                                        data_arry:{{product_list | safe}},
+                                        get totalPages() {
+                                            return Math.max(1, Math.ceil(this.filteredProducts.length / this.pageSize));
+                                        },
+                                        
+                                        printInvoice() {
+                                            var printContents = this.$refs.printTemplate.innerHTML;
+                                            var originalContents = document.body.innerHTML;
+                                            document.body.innerHTML = printContents;
+                                            window.print();
+                                            window.location.reload();
+                                            document.body.innerHTML = originalContents;
+                                        },
+                                        
+
+                                        get filteredProducts() {
+                                            return this.data_arry.filter((product) => {
+                                                const familyMatch = this.filter === 'all' || this.filter == product.marque;
+                                                const nameMatch = product.name.toLowerCase().includes(this.search.toLowerCase());
+                                                const referenceMatch = product.reference.toLowerCase().includes(this.search.toLowerCase());                    
+                                                return (familyMatch) && (nameMatch || referenceMatch) 
+                                            });
+                                        },
+                                          get filteredAndPaginatedProducts() {
+                                              const start = (this.currentPage - 1) * this.pageSize;
+                                              const end = start + this.pageSize;
+                                              return this.filteredProducts.slice(start, end);
+                                          },
+                                        prevPage() {
+                                          if (this.currentPage > 1) {
+                                           this.currentPage -= 1;
+                                          }
+                                        },
+                                        nextPage() {
+                                          if (this.currentPage < this.totalPages) {
+                                              this.currentPage += 1;
+                                          }
+                                        }, 
+                                        exportExcelStock() {
+                                            const array_print = []
+                                            this.data_arry.forEach(stock => {
+                                                array_print.push({
+                                                    reference: stock.reference,
+                                                    name: stock.name,
+                                                    categorie: stock.categorie,
+                                                    marque: stock.marque,
+                                                    etat: stock.etat,
+                                                    prix: stock.prix, 
+                                                    marge: stock.marge,
+                                                    quantityParCarton: stock.quantityParCarton,
+                                                    quantityMinimum: stock.quantityMinimum,                                               
+                                                    lien: stock.lien,                                               
+                                                });
+                                            });
+                                            if (array_print.length == 0){
+                                                array_print.push({
+                                                    reference: '',
+                                                    name: '',
+                                                    categorie: '',
+                                                    marque: '',
+                                                    etat: '',
+                                                    prix:'', 
+                                                    marge: '',
+                                                    quantityParCarton: '',
+                                                    quantityMinimum: '',                                               
+                                                    lien: '',                                               
+                                                });
+                                            }
+                                            const ws = XLSX.utils.json_to_sheet(array_print);
+                                            const wb = XLSX.utils.book_new();
+                                            XLSX.utils.book_append_sheet(wb, ws, 'Produits');
+                                            XLSX.writeFile(wb, 'fichier_liste_produits.xlsx');
+                                        },
+                                        confirmDelete() {
+                                            console.log(this.selectedItems)
+                                            if (!this.selectedItems){
+                                                alert('Veuillez Au moins Selectionner Une ligne');
+                                                return;
+                                            }
+                                            var confirmation = confirm("Etes-vous Sûr De Vouloir Supprimer Les Lignes Séléctionnées ?");
+                                            
+                                            // If the user confirms, perform the deletion
+                                            if (confirmation) {
+                                                dataObj ={
+                                                    listeIds: this.selectedItems,
+                                                }
+                                                axios.post('/home/supprimerProduits',dataObj, {
+                                                        headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRFToken': getCookie('csrftoken'),
+                                                        }
+                                                    })
+                                                .then(response => {
+                                                        alert("Produits Supprimé !");
+                                                        window.location.reload();                                                   
+                                                })
+                                                .catch(error => {
+                                                    // Handle request errors
+                                                alert('Une Erreur A été Surevenu! Veuillez Re-essayer Ulterieurement!');
+                                                });
+                                            } 
+                                        },  
+                                        handleFileChange(event) {
+                                            const file = event.target.files[0];
+                                            if (file) {
+                                                const reader = new FileReader();
+                                                reader.onload = (e) => {
+                                                    const data = new Uint8Array(e.target.result);
+                                                    const workbook = XLSX.read(data, { type: 'array' });
+                                                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                                                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                                                    var produits_import = []    
+                                                    for (let i = 1; i < jsonData.length; i++) {
+                                                        if (jsonData[i][0]) {
+                                                            produits_import.push({
+                                                                reference: jsonData[i][0],
+                                                                name: jsonData[i][1],
+                                                                categorie: jsonData[i][2],
+                                                                marque : jsonData[i][3], 
+                                                                etat: jsonData[i][4],
+                                                                prix: jsonData[i][5],
+                                                                marge: jsonData[i][6],
+                                                                qtyParCarton: jsonData[i][7],
+                                                                quantityMinimum: jsonData[i][8],
+                                                                lien: jsonData[i][9],
+                                                            });
+                                                        }
+                                                    }
+                                                    dataObj ={
+                                                    produits : produits_import,                        
+                                                }
+                                                axios.post('/home/ImportProducts',dataObj, {
+                                                headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRFToken': getCookie('csrftoken'),
+                                                }
+                                                })
+                                                .then(response => {
+                                                    // Check if the deletion was successful
+                                                    if (response.data.success) {            			
+                                                    showModal = false;
+                                                    alert(response.data.message);
+                                                    window.location.reload();
+                                                    } else {
+                                                    alert(response.data.message);
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                // Handle request errors
+                                                alert(error);
+                                                });
+                                                };
+
+                                                reader.readAsArrayBuffer(file);
+                                                this.$refs.fileInput.value = '';
+                                            
+                                            }
+                                        }, 
+                                        deleteItem(reference){
+                                            this.Commandeitems=  this.Commandeitems.filter((item) => item.reference != reference);
+                                        },
+                                        PasserCommande(){
+                                            dataObj ={
+                                                produits: this.Commandeitems, 
+                                                note: this.note                       
+                                            }
+                                            axios.post('/home/PasseCommande',dataObj, {
+                                                headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRFToken': getCookie('csrftoken'),
+                                                }
+                                            }).then(response => {
+                                                console.log(response.data.message);
+                                               
+                                            }).catch(error => {
+                                                alert(error);
+                                            });   
+                                        },
+                                        isOpen: false,
+                                        operation: 'add',
+                                        optionsVisible: false,
+                                        search: "",
+                                        productMatches(reference, name){
+                                            return (
+                                                (reference.toLowerCase().includes(this.search.toLowerCase())) ||
+                                                (name.toLowerCase().includes(this.search.toLowerCase()))
+                                            );
+                                        },
+                                        availableQuantity:0,
+                                        showQuantity:false,
+                                        
+                                        item:{
+                                            ref: "",
+                                            name: "",
+                                            rate: "",
+                                            quantity: "",
+                                            numseries: "",
+                                            cause: "",
+                                        },
+                                        
+                                        filteredOptions() {
+                                                return this.stocks.filter((option) => {
+                                                    return (option.name.toLowerCase().includes(this.search.toLowerCase()));
+                                                });
+                                        },
+                                        addRetour(){ 
+                                            if (!this.item.cause) {
+                                                alert('Veuillez Saisir La Cause.');
+                                                return;
+                                            } 
+                                            dataObj={
+                                                item: this.item,
+                                            }
+                                            axios.post('', {
+                                                formData: dataObj
+                                            }, {
+                                                    headers: {
+                                                    'Content-Type': '',
+                                                    'X-CSRFToken': getCookie('csrftoken'),
+                                                    }
+                                                })
+                                                    .then((response) => {
+                                                    data = response.data
+                                                    if( data.error){
+                                                        alert(data.error);
+                                                    }else{
+                                                        alert("Demande Retour Enregistrée!");
+                                                    }
+                                                    window.location.reload()            
+                                                    })
+                                                    .catch((error) => {
+                                                    alert(error)
+                                                    window.location.reload() 
+                                                });
+                                        },
+                                        addItem(reference, prix, qte){
+                                           this.Commandeitems.push({
+                                             'reference': reference,
+                                             'qty': qte,
+                                             'prix': prix,
+                                             'qtyMin':qte,
+                                           })    
+                                        },
+                                        TotalSum(){
+                                            const sum = this.Commandeitems
+                                                .reduce((accumulator, currentItem) => {
+                                                    return accumulator + parseFloat(currentItem.prix * currentItem.qty );
+                                                }, 0);
+                                            return sum.toFixed(2);
+                                        },
+                                    }
+                                }
+                                function getCookie(name) {
+                                    var cookieValue = null;
+                                    if (document.cookie && document.cookie !== '') {
+                                    var cookies = document.cookie.split(';');
+                                    for (var i = 0; i < cookies.length; i++) {
+                                        var cookie = cookies[i].trim();
+                                        // Does this cookie string begin with the name we want?
+                                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                        break;
+                                        }
+                                    }
+                                    }
+                                    return cookieValue;
+                                }
+                            </script>
+                        </section>
+                    </main>		
+                <!-- end Main content  -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

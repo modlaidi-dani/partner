@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div 
+    x-data="{ 
+        menuOpen: false, 
+        basicSignInModal: false,
+        basicSignUpModal: false,
+        advanceSignInModal: false,
+        advanceSignUpModal: false,
+    }" 
+    class="w-full"
+    >
+    <!-- start::Black overlay -->
+    <div :class="menuOpen ? 'block' : 'hidden'" @click="menuOpen = false" class="fixed  inset-0 bg-white opacity-50 transition-opacity lg:hidden"></div>
+    <!-- end::Black overlay -->
+    {% include 'header.html' %}
+        <div class="w-full flex flex-row">
+            {% include "sidebar.html" %}
+            <div class="h-screen w-full " >
+                <!-- Main content header -->
+                    <main class="w-full px-4 h-full overflow-hidden ">
+                       <section 
+                            class="sales" 
+                            id="sales-view"
+                            x-data="salesView">
+                            <div class="w-full px-2 bg-auto bg-no-repeat bg-center">
+                                <div class="">
+                                    <div class="flex py-4 items-center border-b justify-between">
+                                        <h3 class="text-3xl uppercase font-bold text-primary">Etat de Stock</h3>
+                                    </div>
+                                    <div class="-mb-2 py-2 flex justify-between  border-b">  
+                                        <div class="">
+                                            <div class="border rounded overflow-hidden flex">
+                                                <input type="text" class="px-4 py-2" placeholder="Recherche ..." x-model="search">
+                                                <button class="flex items-center justify-center px-4 border-l">
+                                                  <svg class="h-4 w-4 text-grey-dark" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/></svg>
+                                                </button>
+                                              </div>
+                                        </div>
+                                        <div class="-mb-2 py-2 flex space-x-2">  
+                                            <div class="relative mr-4 inline-block" x-data="{showTooltip1 :false}">
+                                                  <div class="text-gray-500 cursor-pointer w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-300 inline-flex items-center justify-center" @mouseenter="showTooltip1 = true" @mouseleave="showTooltip1 = false" @click="exportExcelStock">
+                                                    <svg id='file-spreadsheet_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                                                        <g transform="matrix(1 0 0 1 12 12)" >
+                                                        <g style="" >
+                                                        <g transform="matrix(1 0 0 1 0 0)" >
+                                                        <path style="stroke: none; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 0 0 L 24 0 L 24 24 L 0 24 z" stroke-linecap="round" />
+                                                        </g>
+                                                        <g transform="matrix(1 0 0 1 4 -7)" >
+                                                        <path style="stroke: rgb(17,156,29); stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-16.5, -5.5)" d="M 14 3 L 14 7 C 14 7.552284749830793 14.447715250169207 8 15 8 L 19 8" stroke-linecap="round" />
+                                                        </g>
+                                                        <g transform="matrix(1 0 0 1 -0.5 -0.5)" >
+                                                        <path style="stroke: rgb(17,156,29); stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 17 21 L 7 21 C 5.8954305003384135 21 5 20.104569499661586 5 19 L 5 5 C 5 3.895430500338413 5.8954305003384135 3 7 3 L 14 3 L 19 8 L 19 19 C 19 20.104569499661586 18.104569499661586 21 17 21 z" stroke-linecap="round" />
+                                                        </g>
+                                                        <g transform="matrix(1 0 0 1 -0.5 2)" >
+                                                        <path style="stroke: rgb(17,156,29); stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -14.5)" d="M 8 11 L 16 11 L 16 18 L 8 18 z" stroke-linecap="round" />
+                                                        </g>
+                                                        <g transform="matrix(1 0 0 1 -0.5 2.5)" >
+                                                        <path style="stroke: rgb(17,156,29); stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -15)" d="M 8 15 L 16 15" stroke-linecap="round" />
+                                                        </g>
+                                                        <g transform="matrix(1 0 0 1 -1.5 2)" >
+                                                        <path style="stroke: rgb(17,156,29); stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-11, -14.5)" d="M 11 11 L 11 18" stroke-linecap="round" />
+                                                        </g>
+                                                        </g>
+                                                        </g>
+                                                    </svg>			  
+                                                  </div>
+                                                  <div x-show.transition="showTooltip1" class="z-40 bgGradient shadow-lg text-center w-32 block absolute left-0 top-0 p-2 mt-12 rounded-lg  text-white text-xs">
+                                                    Exporter Ficher Etat de Stock !
+                                                  </div>
+                                            </div> 
+                                            <div class="relative mr-4 inline-block" x-data="{showTooltip1 :false}">
+                                                  <label class="text-gray-500 cursor-pointer w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-300 inline-flex items-center justify-center" @mouseenter="showTooltip1 = true" @mouseleave="showTooltip1 = false">
+                                                    <svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                      <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+                                                    </svg>	  
+                                                    <input type="file" class="hidden" accept=".xlsx" x-ref="fileInput" x-on:change="handleFileChange">
+                                                  </label>
+                                                  <div x-show.transition="showTooltip1" class="z-40 shadow-lg text-center w-32 block absolute left-0 top-0 p-2 mt-12 rounded-lg bgGradient text-white text-xs">
+                                                    Modifier l'etat de Stock'!
+                                                  </div>
+                                            </div> 
+                                        </div>   
+                                    </div> 
+                                    <div class="flex flex-wrap ">
+                                        <div class="flex-none w-full max-w-full ">
+                                            <div class="  relative flex flex-col min-w-0 mb-6 break-words  border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
+                                                <div class="flex-auto px-0 pt-0 pb-2">
+                                                    <!-- start::Advance Table Manage Icons -->
+                                                    <div class="rounded-lg  py-4 h-screen overflow-x-auto custom-scrollbar mb-12 bg-white/30 bg-center bg-no-repeat" style="background-image:url('{% static 'images/bg02.webp' %}');">
+                                                        <table class="items-center w-full  mb-0 align-top border-gray-200 text-black  backdrop-blur-sm bg-white/30" >
+                                                            <thead class="border-b bg-gray-100 text-gray-800 font-semibold">                
+                                                                <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                    Code
+                                                                </td>
+                                                                <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                    Date Achat
+                                                                </td>
+                                                                <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                    Reference
+                                                                </td>
+                                                                <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                    Designation
+                                                                </td>
+                                                                <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                    Quantité Acheté
+                                                                </td>
+                                                                <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                    Quantity Vendu
+                                                                </td>
+                                                                <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                    Quantity Bloqué
+                                                                </td>
+                                                                <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70"></td>
+                                                            </thead>
+                                                            <tbody class="text-sm bg-center"  style="background-image:url('{% static 'images/bg02.png' %}');">
+                                                                <template x-for="(feedback, index) in filteredAndPaginatedProducts">
+                                                                    <tr class="hover:shadow-lg border-b transition duration-200">
+                                                                        <td class="py-3 pl-2 text-center" x-text="feedback.codeBl"></td>
+                                                                        <td class="py-3 pl-2 text-center capitalize" x-text="feedback.dateBon"></td>
+                                                                        <td class="py-3 pl-2 text-center" x-text="feedback.ProduitReference"></td>
+                                                                        <td class="py-3 pl-2 text-center" x-text="feedback.ProduitName"></td>
+                                                                        <td class="py-3 pl-2 text-center" x-text="feedback.quantity_bought"></td>
+                                                                        <td class="py-3 pl-2 text-center" x-text="feedback.quantity_sold"></td>
+                                                                        <td class="py-3 pl-2 text-center" x-text="feedback.quantity_stucked"></td>
+                                                                        {% comment %} <td class="py-3 pl-2 text-center flex items-center space-x-2">
+                                                                            <a href="#">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500 hover:text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                                                </svg>
+                                                                            </a>
+                                                                        </td> {% endcomment %}
+                                                                    </tr>
+                                                                </template>
+                                                            </tbody>
+                                                        </table>
+                                                        <div class="flex bg-gray-100 justify-between ">
+                                                            <div class="flex justify-start">
+                                                                 <button
+                                                                     x-bind:disabled="currentPage === 1"
+                                                                     @click="prevPage"
+                                                                 >
+                                                                 <svg id='chevrons-left_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                                                                         <g transform="matrix(1 0 0 1 12 12)" >
+                                                                         <g style="" >
+                                                                         <g transform="matrix(1 0 0 1 0 0)" >
+                                                                         <path style="stroke: none; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 0 0 L 24 0 L 24 24 L 0 24 z" stroke-linecap="round" />
+                                                                         </g>
+                                                                         <g transform="matrix(1 0 0 1 -3.75 -0.25)" >
+                                                                         <polyline style="stroke: rgb(0,0,0); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" points="2.5,-5 -2.5,0 2.5,5 " />
+                                                                         </g>
+                                                                         <g transform="matrix(1 0 0 1 2.25 -0.25)" >
+                                                                         <polyline style="stroke: rgb(0,0,0); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" points="2.5,-5 -2.5,0 2.5,5 " />
+                                                                         </g>
+                                                                         </g>
+                                                                         </g>
+                                                                 </svg>
+                                                                 </button>
+                                                                 <p class=" text-lg px-2" x-text="currentPage"></p> /<p id="total-pages" class=" text-lg px-2" x-text="totalPages"></p>
+                                                                 <button
+                                                                     x-bind:disabled="currentPage === totalPages"
+                                                                     @click="nextPage"
+                                                                 >
+                                                                     <svg id='chevrons-right_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                                                                             <g transform="matrix(1 0 0 1 12 12)" >
+                                                                             <g style="" >
+                                                                             <g transform="matrix(1 0 0 1 0 0)" >
+                                                                             <path style="stroke: none; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 0 0 L 24 0 L 24 24 L 0 24 z" stroke-linecap="round" />
+                                                                             </g>
+                                                                             <g transform="matrix(1 0 0 1 -2.75 -0.25)" >
+                                                                             <polyline style="stroke: rgb(0,0,0); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" points="-2.5,-5 2.5,0 -2.5,5 " />
+                                                                             </g>
+                                                                             <g transform="matrix(1 0 0 1 3.25 -0.25)" >
+                                                                             <polyline style="stroke: rgb(0,0,0); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" points="-2.5,-5 2.5,0 -2.5,5 " />
+                                                                             </g>
+                                                                             </g>
+                                                                             </g>
+                                                                     </svg>
+                                                                 </button>
+                                                              </div>
+                                                        </div>    
+                                                    </div>
+                                                    <!-- end::Advance Table Manage Icons -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                                
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+                            <script>
+                                function salesView(){
+                                    return{
+                                        data_arry:{{stocks | safe}}, 
+                                        currentPage: 1,
+                                        search:'',
+                                        pageSize: 10,
+                                        get totalPages() {
+                                            return Math.max(1, Math.ceil(this.filteredProducts.length / this.pageSize));
+                                        },
+                                        get filteredProducts() {
+                                            return this.data_arry.filter((product) => {
+                                                const nameMatch = product.ProduitName.toLowerCase().includes(this.search.toLowerCase());
+                                                const referenceMatch = product.ProduitReference.toLowerCase().includes(this.search.toLowerCase());                    
+                                                return (nameMatch || referenceMatch) 
+                                            });
+                                            
+                                        },
+                                        get filteredAndPaginatedProducts() {
+                                              const start = (this.currentPage - 1) * this.pageSize;
+                                              const end = start + this.pageSize;
+                                              return this.filteredProducts.slice(start, end);
+                                        },
+                                        prevPage() {
+                                          if (this.currentPage > 1) {
+                                           this.currentPage -= 1;
+                                          }
+                                        },
+                                        nextPage() {
+                                          if (this.currentPage < this.totalPages) {
+                                              this.currentPage += 1;
+                                          }
+                                        }, 
+                                        exportExcelStock() {
+                                            const array_print = []
+                                              this.data_arry.forEach(stock => {
+                                                // Add the product itself
+                                                array_print.push({
+                                                    codeBl : stock.codeBl,
+                                                    dateBon: stock.dateBon,
+                                                    ProduitReference: stock.ProduitReference,
+                                                    ProduitName: stock.ProduitName,
+                                                    qte_achete: stock.quantity_bought,
+                                                    qte_vendu: stock.quantity_sold,
+                                                });
+                                              });
+                                            const ws = XLSX.utils.json_to_sheet(array_print);
+                                            const wb = XLSX.utils.book_new();
+                                            XLSX.utils.book_append_sheet(wb, ws, 'Stock');
+                                            XLSX.writeFile(wb, 'fichier_liste_stock.xlsx');
+                                        },
+                                        handleFileChange(event) {
+                                            const file = event.target.files[0];
+                                            if (file) {
+                                              const reader = new FileReader();
+                                              reader.onload = (e) => {
+                                                const data = new Uint8Array(e.target.result);
+                                                const workbook = XLSX.read(data, { type: 'array' });
+                                                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                                                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                                                var stock_import = []    
+                                                for (let i = 1; i < jsonData.length; i++) {
+                                                  if (jsonData[i][0]) {
+                                                    stock_import.push({
+                                                        codeBl: jsonData[i][0],
+                                                        dateBon: jsonData[i][1],
+                                                        ProduitReference: jsonData[i][2],
+                                                        ProduitName: jsonData[i][3],
+                                                        qte_achete: jsonData[i][4],
+                                                        qte_vendu: jsonData[i][5],
+                                                    });
+                                                  }
+                                                }
+                                                dataObj ={
+                                                stock : stock_import,                        
+                                              }
+                                              axios.post('ImportStock/',dataObj, {
+                                                headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRFToken': getCookie('csrftoken'),
+                                                }
+                                              })
+                                                .then(response => {
+                                                  // Check if the deletion was successful
+                                                  if (response.data.success) {            			
+                                                    showModal = false;
+                                                    alert(response.data.message);
+                                                    window.location.reload();
+                                                  } else {
+                                                    alert(response.data.message);
+                                                  }
+                                                })
+                                              .catch(error => {
+                                              // Handle request errors
+                                              alert(error);
+                                              });
+                                              };
+                                              
+                                              reader.readAsArrayBuffer(file);
+                                              this.$refs.fileInput.value = '';
+                                              
+                                            }
+                                        },  
+                                        isOpen:false,
+                                    }
+                                }
+                            </script>
+                        </section>
+                    </main>		
+                <!-- end Main content  -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

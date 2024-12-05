@@ -1,0 +1,250 @@
+{% load static %}
+<div :class="menuOpen ? 'block' : 'hidden'" @click="menuOpen = false" class="fixed z-20 inset-0 bg-white opacity-50 transition-opacity lg:hidden shadow-lg"></div>
+        <!-- end::Black overlay -->
+    
+    <aside 
+        :class="menuOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'" 
+        class="fixed z-30 inset-y-0 left-0 w-48 py-4 transition duration-300 sidebarclass overflow-y-auto lg:translate-x-0 lg:inset-0 custom-scrollbar shadow-xl h-screen" //mx-4 //my-6
+        >
+        <!-- start::Logo -->
+        <div class="flex items-center justify-center p-5  h-10 ">
+            <img src="{% static 'images/logodiva.png' %}" alt="">
+        </div> 
+        <!-- end::Logo -->
+        
+        <div class="flex flex-col mt-4 justify-between" style="height: 90%;">
+            <!-- start::Navigation -->
+            <div class="justify-start mt-8 ">
+                <a 
+                    x-data="{ linkHover: false }"
+                    @mouseover = "linkHover = true"
+                    @mouseleave = "linkHover = false"
+                    href="{% url 'payments-page' %}" 
+                    class="flex items-center hover:bg-black/10 text-white px-6 py-2 mb-1 cursor-pointer transition duration-200"
+                    >
+                    <svg width='24' height='24' viewBox="0 0 24 24" enable-background="new 0 0 24 24" id="Layer_1" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#ffffff" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="purse_1_"> <path d="M21.5,23h-20C1.224,23,1,22.776,1,22.5v-14C1,8.224,1.224,8,1.5,8h17C18.776,8,19,8.224,19,8.5 S18.776,9,18.5,9H2v13h19.5c0.276,0,0.5,0.224,0.5,0.5S21.776,23,21.5,23z" fill="#263238"></path> <g> <path d="M19.5,17c0-1.135-0.771-1.962-2.291-2.458l-0.113-0.037C16.526,14.319,16,14.069,16,13.5 c0-0.589,0.411-1,1-1c0.704,0,1.174,0.378,1.178,0.382c0.213,0.178,0.527,0.15,0.705-0.06c0.178-0.212,0.15-0.526-0.061-0.704 c-0.025-0.021-0.535-0.437-1.331-0.572C17.492,11.53,17.5,11.517,17.5,11.5V11c0-0.276-0.224-0.5-0.5-0.5s-0.5,0.224-0.5,0.5v0.5 c0,0.021,0.01,0.04,0.013,0.062C15.625,11.769,15,12.53,15,13.5c0,1.374,1.344,1.813,1.785,1.955l0.113,0.037 C17.977,15.844,18.5,16.338,18.5,17c0,0.855-0.645,1.5-1.5,1.5c-0.928,0-1.459-0.612-1.6-0.8c-0.166-0.222-0.48-0.265-0.7-0.101 c-0.222,0.166-0.267,0.479-0.101,0.7c0.185,0.247,0.819,0.981,1.908,1.16c-0.001,0.014-0.008,0.026-0.008,0.04V20 c0,0.276,0.224,0.5,0.5,0.5s0.5-0.224,0.5-0.5v-0.5c0-0.017-0.008-0.031-0.01-0.048C18.649,19.23,19.5,18.233,19.5,17z" fill="#263238"></path> </g> <g> <path d="M21.5,23c-0.276,0-0.5-0.224-0.5-0.5s0.224-0.5,0.5-0.5c1.379,0,2.5-1.121,2.5-2.5v-3 c0-0.276,0.224-0.5,0.5-0.5s0.5,0.224,0.5,0.5v3C25,21.43,23.43,23,21.5,23z" fill="#263238"></path> <path d="M24.5,20c-0.276,0-0.5-0.224-0.5-0.5c0-1.379-1.121-2.5-2.5-2.5h-1c-0.276,0-0.5-0.224-0.5-0.5v-14 C20,2.224,20.224,2,20.5,2h1C23.43,2,25,3.57,25,5.5v14C25,19.776,24.776,20,24.5,20z M21,16h0.5c0.979,0,1.864,0.403,2.5,1.053 V5.5C24,4.121,22.879,3,21.5,3H21V16z" fill="#263238"></path> </g> <path d="M30.5,31h-29C1.224,31,1,30.776,1,30.5S1.224,30,1.5,30h29c0.276,0,0.5,0.224,0.5,0.5S30.776,31,30.5,31z" fill="#263238"></path> <path d="M30.5,29h-29C1.224,29,1,28.776,1,28.5S1.224,28,1.5,28h29c0.276,0,0.5,0.224,0.5,0.5S30.776,29,30.5,29z" fill="#263238"></path> <path d="M30.5,27h-29C1.224,27,1,26.776,1,26.5S1.224,26,1.5,26h29c0.276,0,0.5,0.224,0.5,0.5S30.776,27,30.5,27z" fill="#263238"></path> <path d="M30.5,25h-29C1.224,25,1,24.776,1,24.5S1.224,24,1.5,24H30V11h-3.5c-0.276,0-0.5-0.224-0.5-0.5 s0.224-0.5,0.5-0.5h4c0.276,0,0.5,0.224,0.5,0.5v14C31,24.776,30.776,25,30.5,25z" fill="#263238"></path> </g> </g></svg>
+                    <span 
+                        class="ml-3 transition duration-200" 
+                        :class="linkHover ? 'text-white' : ''"
+                    >
+                        Paiement
+                    </span>
+                </a>
+                <a 
+                    x-data="{ linkHover: false }"
+                    @mouseover = "linkHover = true"
+                    @mouseleave = "linkHover = false"
+                    href="#"
+                    disabled
+                    class="flex items-center hover:bg-black/10 text-white px-6 py-2 mb-1 cursor-pointer transition duration-200"
+                    >
+                    <svg id='discount-2_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                        <g transform="matrix(1 0 0 1 12 12)" >
+                        <g style="" >
+                        <g transform="matrix(1 0 0 1 0 0)" >
+                        <path style="stroke: none; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 0 0 L 24 0 L 24 24 L 0 24 z" stroke-linecap="round" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 0 0)" >
+                        <line style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" x1="-3" y1="3" x2="3" y2="-3" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 -2.5 -2.5)" >
+                        <circle style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" cx="0" cy="0" r="0.5" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 2.5 2.5)" >
+                        <circle style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" cx="0" cy="0" r="0.5" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 0.01 0.01)" >
+                        <path style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12.01, -12.01)" d="M 5 7.2 C 5 5.9849735503722545 5.9849735503722545 5 7.2 5 L 8.2 5 C 8.780898749018245 4.999667853652249 9.338090005592829 4.769601786421453 9.75 4.360000000000001 L 10.45 3.66 C 10.86292975954684 3.2447430859710815 11.424381275087423 3.011257554373225 12.01 3.011257554373225 C 12.595618724912576 3.011257554373225 13.157070240453159 3.244743085971082 13.57 3.6600000000000006 L 14.27 4.36 C 14.68190999440717 4.769601786421453 15.239101250981754 4.999667853652249 15.82 5 L 16.82 5 C 18.035026449627747 5 19.02 5.9849735503722545 19.02 7.199999999999999 L 19.02 8.2 C 19.02033214634775 8.780898749018247 19.250398213578546 9.33809000559283 19.66 9.75 L 20.36 10.45 C 20.77525691402892 10.86292975954684 21.008742445626773 11.424381275087422 21.008742445626773 12.01 C 21.008742445626776 12.595618724912576 20.77525691402892 13.157070240453159 20.36 13.57 L 19.66 14.27 C 19.250398213578546 14.68190999440717 19.02033214634775 15.239101250981754 19.02 15.82 L 19.02 16.82 C 19.02 18.035026449627747 18.035026449627743 19.02 16.82 19.02 L 15.82 19.02 C 15.239101250981753 19.02033214634775 14.68190999440717 19.250398213578546 14.27 19.66 L 13.57 20.36 C 13.157070240453159 20.77525691402892 12.595618724912576 21.008742445626773 12.01 21.008742445626773 C 11.424381275087423 21.008742445626773 10.86292975954684 20.77525691402892 10.45 20.36 L 9.75 19.66 C 9.33809000559283 19.250398213578546 8.780898749018245 19.02033214634775 8.199999999999998 19.02 L 7.199999999999999 19.02 C 5.9849735503722545 19.02 5 18.035026449627747 4.999999999999999 16.82 L 4.999999999999999 15.82 C 4.999667853652247 15.239101250981754 4.769601786421452 14.68190999440717 4.359999999999999 14.27 L 3.6599999999999993 13.57 C 3.244743085971081 13.157070240453159 3.0112575543732243 12.595618724912576 3.0112575543732243 12.01 C 3.0112575543732243 11.424381275087423 3.2447430859710806 10.86292975954684 3.6599999999999984 10.45 L 4.359999999999999 9.75 C 4.769601786421452 9.33809000559283 4.999667853652247 8.780898749018247 4.999999999999999 8.2 L 4.999999999999999 7.199999999999999" stroke-linecap="round" />
+                        </g>
+                        </g>
+                        </g>
+                    </svg>
+                    <span 
+                        class="ml-3 transition duration-200" 
+                        :class="linkHover ? 'text-white' : ''"
+                    >
+                        Etat Remise
+                    </span>
+                </a>
+                <a 
+                    x-data="{ linkHover: false }"
+                    @mouseover = "linkHover = true"
+                    @mouseleave = "linkHover = false"
+                    href="{% url 'feedback-page' %}" 
+                    class="flex items-center text-white px-6 py-2 mb-1 cursor-pointer hover:bg-black/10 transition duration-200"
+                >
+                <svg id='message_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                        <g transform="matrix(1 0 0 1 12 12)" >
+                        <g style="" >
+                        <g transform="matrix(1 0 0 1 0 0)" >
+                        <path style="stroke: none; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 0 0 L 24 0 L 24 24 L 0 24 z" stroke-linecap="round" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 0 1)" >
+                        <path style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -13)" d="M 4 21 L 4 8 C 4 6.343145750507619 5.343145750507619 5 7 5 L 17 5 C 18.65685424949238 5 20 6.3431457505076185 20 7.999999999999999 L 20 14 C 20 15.65685424949238 18.65685424949238 17 17 17 L 8 17 L 4 21" stroke-linecap="round" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 0 -3)" >
+                        <line style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" x1="-4" y1="0" x2="4" y2="0" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 -1 1)" >
+                        <line style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" x1="-3" y1="0" x2="3" y2="0" />
+                        </g>
+                        </g>
+                        </g>
+                    </svg>
+                    <span 
+                        class="ml-3 transition duration-200" 
+                        :class="linkHover ? 'text-white' : ''"
+                    >
+                        FeedBack
+                    </span>
+                </a>
+                <a 
+                    x-data="{ linkHover: false }"
+                    @mouseover = "linkHover = true"
+                    @mouseleave = "linkHover = false"
+                    href="{% url 'etatstock-page' %}" 
+                    class="flex items-center text-white px-6 py-2 mb-1 cursor-pointer  hover:bg-black/10 transition duration-200"
+                >
+                    <svg id='building-store_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                        <g transform="matrix(1 0 0 1 12 12)" >
+                        <g style="" >
+                        <g transform="matrix(1 0 0 1 0 0)" >
+                        <path style="stroke: none; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 0 0 L 24 0 L 24 24 L 0 24 z" stroke-linecap="round" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 0 9)" >
+                        <line style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" x1="-9" y1="0" x2="9" y2="0" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 0 -5)" >
+                        <path style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -7)" d="M 3 7 L 3 8 C 3 9.65685424949238 4.343145750507619 11 6 11 C 7.656854249492381 11 9 9.65685424949238 9 8 L 9 7 M 9 8 C 9 9.65685424949238 10.34314575050762 11 12 11 C 13.65685424949238 11 15 9.65685424949238 15 8 L 15 7 M 15 8 C 15 9.65685424949238 16.34314575050762 11 18 11 C 19.65685424949238 11 21 9.65685424949238 21 8 L 21 7 L 3 7 L 5 3 L 19 3 L 21 7" stroke-linecap="round" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 -7 3.93)" >
+                        <line style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" x1="0" y1="5.075" x2="0" y2="-5.075" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 7 3.93)" >
+                        <line style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" x1="0" y1="5.075" x2="0" y2="-5.075" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 0 6)" >
+                        <path style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -18)" d="M 9 21 L 9 17 C 9 15.895430500338414 9.895430500338414 15 11 15 L 13 15 C 14.104569499661586 15 15 15.895430500338414 15 17 L 15 21" stroke-linecap="round" />
+                        </g>
+                        </g>
+                        </g>
+                    </svg>
+                    <span 
+                        class="ml-3 transition duration-200" 
+                        :class="linkHover ? 'text-white' : ''"
+                    >
+                        Etat Stock
+                    </span>
+                </a>
+                <a 
+                    x-data="{ linkHover: false }"
+                    @mouseover = "linkHover = true"
+                    @mouseleave = "linkHover = false"
+                    href="{% url 'etatgarantie-page' %}" 
+                    class="flex items-center text-white px-6 py-2 mb-1 cursor-pointer  hover:bg-black/10 transition duration-200"
+                >
+                    <svg id='building-store_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                        <g transform="matrix(1 0 0 1 12 12)" >
+                        <g style="" >
+                        <g transform="matrix(1 0 0 1 0 0)" >
+                        <path style="stroke: none; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 0 0 L 24 0 L 24 24 L 0 24 z" stroke-linecap="round" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 0 9)" >
+                        <line style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" x1="-9" y1="0" x2="9" y2="0" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 0 -5)" >
+                        <path style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -7)" d="M 3 7 L 3 8 C 3 9.65685424949238 4.343145750507619 11 6 11 C 7.656854249492381 11 9 9.65685424949238 9 8 L 9 7 M 9 8 C 9 9.65685424949238 10.34314575050762 11 12 11 C 13.65685424949238 11 15 9.65685424949238 15 8 L 15 7 M 15 8 C 15 9.65685424949238 16.34314575050762 11 18 11 C 19.65685424949238 11 21 9.65685424949238 21 8 L 21 7 L 3 7 L 5 3 L 19 3 L 21 7" stroke-linecap="round" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 -7 3.93)" >
+                        <line style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" x1="0" y1="5.075" x2="0" y2="-5.075" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 7 3.93)" >
+                        <line style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" x1="0" y1="5.075" x2="0" y2="-5.075" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 0 6)" >
+                        <path style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -18)" d="M 9 21 L 9 17 C 9 15.895430500338414 9.895430500338414 15 11 15 L 13 15 C 14.104569499661586 15 15 15.895430500338414 15 17 L 15 21" stroke-linecap="round" />
+                        </g>
+                        </g>
+                        </g>
+                    </svg>
+                    <span 
+                        class="ml-3 transition duration-200" 
+                        :class="linkHover ? 'text-white' : ''"
+                    >
+                       Garantie
+                    </span>
+                </a>
+                <a 
+                    x-data="{ linkHover: false }"
+                    @mouseover = "linkHover = true"
+                    @mouseleave = "linkHover = false"
+                    href="{% url 'etatretour-page' %}" 
+                    class="flex items-center text-white px-6 py-2 mb-1 cursor-pointer  hover:bg-black/10 transition duration-200"
+                >
+                    <svg id='receipt-refund_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                        <g transform="matrix(1 0 0 1 12 12)" >
+                        <g style="" >
+                        <g transform="matrix(1 0 0 1 0 0)" >
+                        <path style="stroke: none; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 0 0 L 24 0 L 24 24 L 0 24 z" stroke-linecap="round" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 0 0)" >
+                        <path style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 5 21 L 5 5 C 5 3.895430500338413 5.8954305003384135 3 7 3 L 17 3 C 18.104569499661586 3 19 3.8954305003384126 19 5 L 19 21 L 16 19 L 14 21 L 12 19 L 10 21 L 8 19 L 5 21" stroke-linecap="round" />
+                        </g>
+                        <g transform="matrix(1 0 0 1 0 -1)" >
+                        <path style="stroke: rgb(255,255,255); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -11)" d="M 15 14 L 15 12 C 15 10.895430500338414 14.104569499661586 10 13 10 L 9 10 L 11 8 M 11 12 L 9 10" stroke-linecap="round" />
+                        </g>
+                        </g>
+                        </g>
+                    </svg>
+                    <span 
+                        class="ml-3 transition duration-200" 
+                        :class="linkHover ? 'text-white' : ''"
+                    >
+                        Etat Retour
+                    </span>
+                </a>
+                <a 
+                    x-data="{ linkHover: false }"
+                    @mouseover = "linkHover = true"
+                    @mouseleave = "linkHover = false"
+                    href="{% url 'products-page' %}" 
+                    class="flex items-center text-white px-6 py-2 mb-1 cursor-pointer  hover:bg-black/10 transition duration-200"
+                >
+                    <svg id='Shopping_Mall_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                        <g transform="matrix(0.41 0 0 0.41 12 12)" >
+                        <path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" translate(-25, -25.5)" d="M 25 1 C 19.486 1 15 5.486 15 11 L 15 13 L 7.109375 13 L 2.8808594 50 L 47.119141 50 L 42.890625 13 L 37 13 L 37 19 C 37 20.66 35.66 22 34 22 C 33.78 22 33.559609 21.969687 33.349609 21.929688 L 33.349609 21.919922 C 31.999609 21.619922 31 20.43 31 19 C 31 17.692493 31.835762 16.593657 33 16.181641 L 33 19 C 33 19.552 33.447 20 34 20 C 34.553 20 35 19.552 35 19 L 35 16.179688 L 35 13 L 35 11 C 35 5.486 30.514 1 25 1 z M 25 3 C 29.411 3 33 6.589 33 11 L 33 13 L 19 13 L 19 19 C 19 20.66 17.66 22 16 22 C 15.78 22 15.559609 21.969687 15.349609 21.929688 L 15.349609 21.919922 C 14.009609 21.629922 13 20.43 13 19 C 13 17.692493 13.835762 16.593657 15 16.181641 L 15 19 C 15 19.552 15.448 20 16 20 C 16.552 20 17 19.552 17 19 L 17 16.179688 L 17 13 L 17 11 C 17 6.589 20.589 3 25 3 z M 16 33 L 24 33 L 24 48 L 16 48 L 16 33 z M 26 33 L 34 33 L 34 48 L 26 48 L 26 33 z M 21 40 C 20.447715250169207 40 20 40.4477152501692 20 41 C 20 41.5522847498308 20.447715250169207 42 21 42 C 21.552284749830793 42 22 41.5522847498308 22 41 C 22 40.4477152501692 21.552284749830793 40 21 40 z M 29 40 C 28.447715250169207 40 28 40.4477152501692 28 41 C 28 41.5522847498308 28.447715250169207 42 29 42 C 29.552284749830793 42 30 41.5522847498308 30 41 C 30 40.4477152501692 29.552284749830793 40 29 40 z" stroke-linecap="round" />
+                        </g>
+                    </svg>
+                    <span 
+                        class="ml-3 transition duration-200" 
+                        :class="linkHover ? 'text-white' : ''"
+                    >
+                        Liste Produits
+                    </span>
+                </a>
+                <a 
+                    x-data="{ linkHover: false }"
+                    @mouseover = "linkHover = true"
+                    @mouseleave = "linkHover = false"
+                    href="{% url 'commandes-page' %}" 
+                    class="flex items-center text-white px-6 py-2 mb-1 cursor-pointer  hover:bg-black/10 transition duration-200"
+                 >
+                    <svg id='Purchase_Order_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                        <g transform="matrix(0.43 0 0 0.43 12 12)" >
+                        <path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" translate(-25, -25)" d="M 6 2 L 6 48 L 44 48 L 44 2 L 6 2 z M 17 39 L 13 39 L 13 37 L 17 37 L 17 39 z M 17 33 L 13 33 L 13 31 L 17 31 L 17 33 z M 17 27 L 13 27 L 13 25 L 17 25 L 17 27 z M 37 39 L 20 39 L 20 37 L 37 37 L 37 39 z M 37 33 L 20 33 L 20 31 L 37 31 L 37 33 z M 37 27 L 20 27 L 20 25 L 37 25 L 37 27 z M 37 13 L 13 13 L 13 11 L 37 11 L 37 13 z" stroke-linecap="round" />
+                        </g>
+                    </svg>
+                    <span 
+                        class="ml-3 transition duration-200" 
+                        :class="linkHover ? 'text-white' : ''"
+                    >
+                       Commandes
+                    </span>
+                </a>
+                
+                <!-- end::Menu link -->
+            </div>
+            <!-- end::Navigation -->
+            
+        </div>
+    </aside>

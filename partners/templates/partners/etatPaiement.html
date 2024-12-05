@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div 
+    x-data="{ 
+        menuOpen: false, 
+        basicSignInModal: false,
+        basicSignUpModal: false,
+        advanceSignInModal: false,
+        advanceSignUpModal: false,
+    }" 
+    class="w-full"
+    >
+    <!-- start::Black overlay -->
+    <div :class="menuOpen ? 'block' : 'hidden'" @click="menuOpen = false" class="fixed  inset-0 bg-white opacity-50 transition-opacity lg:hidden"></div>
+    <!-- end::Black overlay -->
+    {% include 'header.html' %}
+        <div class="w-full flex flex-row">
+            {% include "sidebar.html" %}
+            <div class="h-full w-full bg-center"  >
+                <!-- Main content header -->
+                    <main class="w-full overflow-hidden  bg-white/50 " class="sales" 
+                    id="sales-view"
+                    x-data="salesView" x-init="createLineChart()">
+                           <div class="container-fluid">
+                                <div class="pt-6 px-4">
+                                    <div class="mb-4 w-full grid grid-cols-1 md:grid-cols-4 gap-4">
+                                        <div class="bgGradient shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                                           <div class="flex items-center ">
+                                              <div class="flex-shrink-0 ">
+                                                 <span class="text-2xl sm:text-3xl leading-none font-bold text-white">{{montantSolde}}</span>
+                                                 <h3 class="text-base font-normal text-gray-50">Solde</h3>
+                                              </div>
+                                           </div>
+                                        </div>
+                                        
+                                        
+                                        
+                                        
+                                        <div class="bg-gradient-to-t from-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                                           <div class="flex items-center ">
+                                              <div class="flex-shrink-0 ">
+                                                 <span class="text-2xl sm:text-3xl leading-none font-bold TextGradient">{{chiffreAffaire}}</span>
+                                                 <h3 class="text-base font-normal TextGradient">Chiffre Affaire</h3>
+                                              </div>
+                                              
+                                           </div>
+                                        </div>
+                                        <div class="bgGradient drop-shadow-lg rounded-lg p-4 sm:p-6 xl:p-8 ">
+                                            <div class="flex items-center ">
+                                               <div class="flex-shrink-0 ">
+                                                  <span class="text-2xl sm:text-3xl leading-none font-bold text-white">{{montantPayed}}</span>
+                                                  <h3 class="text-base font-normal text-gray-50">Montant Réglé</h3>
+                                               </div>
+                                               
+                                            </div>
+                                        </div>
+                                        <div class="bg-gradient-to-t from-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                                           <div class="flex items-center ">
+                                              <div class="flex-shrink-0 ">
+                                                 <span class="text-2xl sm:text-3xl leading-none font-bold TextGradient">{{montantAnnule}}</span>
+                                                 <h3 class="text-base font-normal TextGradient">Montant Annulé</h3>
+                                              </div>
+                                              
+                                           </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8  md:col-span-2">
+                                            <div class="flex items-center justify-between mb-4">
+                                                <div class="flex-shrink-0">
+                                                <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900">Evolution de Chiffre d'affaire</span>
+                                                <h3 class="text-base font-normal text-gray-500">Evolution temporelle</h3>
+                                                </div>
+                                                
+                                            </div>
+                                            <div x-data="{ data_arry:{{paiement_perm | safe}}, }" class="container mx-auto mt-8">
+                                                <canvas id="myChart"  x-init="initChart(data_arry)"></canvas>
+                                            </div>
+                                            
+                                            <script>
+                                                function initChart(data_arry) {
+
+                                                    var dateArray = data_arry.map(item => item.date);
+                                                    var montantArray = data_arry.map(item => parseFloat(item.montantBl));    
+                                                    const chartData = {
+                                                        labels: dateArray,
+                                                        datasets: [{
+                                                            label: 'Sales',
+                                                            borderColor: '#ff0c3b', // Set border color
+                                                            backgroundColor: 'rgba(241, 144, 163, 0.5)',
+                                                            fill: true,
+                                                            tension: 0.4, // Adjust the tension to make it wavy
+                                                            borderWidth: 2, // Set border width
+                                                            data: montantArray
+                                                        }]
+                                                    };
+                                            
+                                                    // Chart configuration
+                                                    const config = {
+                                                        type: 'line',
+                                                        data: chartData,
+                                                        options: {
+                                                            plugins: {
+                                                                legend: {
+                                                                    display: false // Hide legend
+                                                                }
+                                                            },
+                                                            elements: {
+                                                                line: {
+                                                                    borderWidth: 2
+                                                                }
+                                                            }
+                                                        }
+                                                    };
+                                            
+                                                    // Create the chart
+                                                    var myChart = new Chart(
+                                                        document.getElementById('myChart'),
+                                                        config
+                                                    );
+                                                }
+                                            
+                                            </script>
+                                        </div>
+                                        <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                                            <div class="mb-4 flex items-center justify-between">
+                                                <div>
+                                                <h3 class="text-xl font-bold text-gray-900 mb-2">Les reglements  éffectués</h3>
+                                                <span class="text-base font-normal text-gray-500">La liste des règlements déposé</span>
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                <a href="#" class="text-sm font-medium TextGradient hover:bg-gray-100 rounded-lg p-2">Voir tout</a>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col mt-8">
+                                                <div class="overflow-x-auto rounded-lg">
+                                                <div class="align-middle inline-block min-w-full">
+                                                    <div class="shadow overflow-hidden sm:rounded-lg">
+                                                        <table class="min-w-full divide-y divide-gray-200">
+                                                            <thead class="bg-gray-50">
+                                                            <tr>
+                                                                <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                    Date 
+                                                                </th>
+                                                                <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                    Montant
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody class="bg-white">
+                                                                <template x-for="item in reglements">
+                                                                    <tr>
+                                                                        <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500" x-text="item.dateReglement">
+                                                                            
+                                                                        </td>
+                                                                        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900" x-text="item.montant">
+                                                                           
+                                                                        </td>
+                                                                    </tr>
+                                                                    
+                                                                </template>
+                                                           
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+			                </div>
+                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                            <script async defer src="https://buttons.github.io/buttons.js"></script>
+                            <script src="https://demo.themesberg.com/windster/app.bundle.js"></script>
+                            <script>
+                                function salesView(){
+                                    return{
+                                        data_arry:{{paiement_perm | safe}}, 
+                                        reglements : {{liste_regs | safe}},
+                                                                                
+                                    }
+                                }
+                                function getCookie(name) {
+                                    var cookieValue = null;
+                                    if (document.cookie && document.cookie !== '') {
+                                    var cookies = document.cookie.split(';');
+                                    for (var i = 0; i < cookies.length; i++) {
+                                        var cookie = cookies[i].trim();
+                                        // Does this cookie string begin with the name we want?
+                                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                        break;
+                                        }
+                                    }
+                                    }
+                                    return cookieValue;
+                                }
+                            </script>
+                    </main>		
+                <!-- end Main content  -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

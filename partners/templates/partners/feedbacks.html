@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div 
+    x-data="{ 
+        menuOpen: false, 
+        basicSignInModal: false,
+        basicSignUpModal: false,
+        advanceSignInModal: false,
+        advanceSignUpModal: false,
+    }" 
+    class="w-full"
+    >
+    <!-- start::Black overlay -->
+    <div :class="menuOpen ? 'block' : 'hidden'" @click="menuOpen = false" class="fixed  inset-0 bg-white opacity-50 transition-opacity lg:hidden"></div>
+    <!-- end::Black overlay -->
+    {% include 'header.html' %}
+        <div class="w-full flex flex-row">
+            {% include "sidebar.html" %}
+            <div class="h-screen w-full bg-center"  >
+                <!-- Main content header -->
+                    <main class="w-full overflow-hidden h-screen bg-white/50 ">
+                       <section 
+                            class="sales" 
+                            id="sales-view"
+                            x-data="salesView">
+                            <div class="w-full bg-auto bg-no-repeat bg-center">
+                                <div class="">
+                                    <div class="py-2 mt-4 flex flex-wrap flex-grow justify-between border-b px-2">  
+                                        <div>
+                                            <h3 class="text-3xl uppercase  font-bold text-primary">Page de Liste des Feedbacks</h3>
+                                        </div>  
+                                        <div id= "gradientButton" class="inline-block px-8 py-2 h-10 text-sm leading-5 font-medium rounded-md gradientButton hover: text-white hover:shadow-inner focus:outline-none focus:shadow-outline cursor-pointer">
+                                           <div id="translate"></div>
+                                           <a x-on:click="isOpen = true; operation = 'add';">Envoyer feedBack</a> 
+                                        </div>
+                                    </div>  
+                                    <div class="flex flex-wrap -mx-3 ">
+                                        <div class="flex-none w-full max-w-full px-3 ">
+                                            <div class="  relative flex flex-col min-w-0 mb-6 break-words  border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
+                                                <div class="flex-auto px-0 pt-0 pb-2">
+                                                    <div class="rounded-lg px-2 py-4 h-screen overflow-x-auto custom-scrollbar mb-12 bg-white/30 bg-center bg-no-repeat" style="background-image:url('{% static 'images/bg01.webp' %}');">
+                                                        <table class="items-center w-full  mb-0 align-top border-gray-200 text-black  backdrop-blur-sm bg-white/30" >
+                                                            <thead class="border-b bg-gray-100 text-gray-800 font-semibold">                      
+                                                                <td class="py-2 pl-2">
+                                                                    ID FeedBack
+                                                                </td>
+                                                                <td class="py-2 pl-2">
+                                                                    Date FeedBack
+                                                                </td>
+                                                                <td class="py-2 pl-2">
+                                                                    Objet FeedBack
+                                                                </td>
+                                                                <td class="py-2 pl-2">
+                                                                    Status
+                                                                </td>
+                                                                <td class="py-2 pl-2"></td>
+                                                            </thead>
+                                                            <tbody class="text-sm">
+                                                                <template x-for="(feedback, index) in data_arry">
+                                                                    <tr class=" hover:shadow-lg border transition duration-200">
+                                                                        <td class="py-3 pl-2" x-text="index"></td>
+                                                                        <td class="py-3 pl-2 capitalize" x-text="feedback.dateBon"></td>
+                                                                        <td class="py-3 pl-2" x-text="feedback.objet"></td>
+                                                                        <td class="py-3 pl-2">
+                                                                            <span class="bg-green-500 px-1.5 py-0.5 rounded-lg text-gray-100" x-text="feedback.etatFeedBack"></span>
+                                                                        </td>                                  
+                                                                        <td class="py-3 pl-2 flex items-center space-x-2">
+                                                                            <a class="cursor-pointer" x-on:click=" feedbackID = feedback.id; objet = feedback.objet; message = feedback.message; operation= 'update'; isOpen = true;">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500 hover:text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                                                </svg>
+                                                                            </a>
+                                                                            <a @click.prevent="confirmDelete(feedback.id)">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500 hover:text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                                                </svg>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </template>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style=" background-color: rgba(0, 0, 0, 0.8); " class="fixed z-40 top-0 right-0 left-0 bottom-0 h-full w-full overflow-y-scroll" x-cloak x-show.transition.opacity="isOpen">
+                                        <div class="p-4 max-w-xl mx-auto relative left-0 right-0 overflow-hidden mt-0 md:mt-12">
+                                            <div class="shadow absolute right-0 top-0 w-10 h-10 rounded-full z-20 backdrop-blur-md bg-white/30 text-gray-500 hover:text-gray-800 inline-flex items-center justify-center cursor-pointer"
+                                                x-on:click="isOpen = false">
+                                                <svg class="fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                <path
+                                                    d="M16.192 6.344L11.949 10.586 7.707 6.344 6.293 7.758 10.535 12 6.293 16.242 7.707 17.656 11.949 13.414 16.192 17.656 17.606 16.242 13.364 12 17.606 7.758z" />
+                                                </svg>
+                                            </div>
+                                            <form action="" id="myForm">
+                                                <div class="shadow w-full rounded-lg backdrop-blur-md bg-white/80 overflow-hidden block p-8">		
+                                                <h2 class="text-2xl mb-6 text-gray-800 uppercase border-b pb-2">Envoyer Un FeedBack</h2>
+                                                    <div class="form-input">
+                                                        <div class="mb-4">
+                                                        <label class="block text-gray-800 font-semibold mb-2" for="phone">
+                                                            Objet :
+                                                        </label>
+                                                        <input
+                                                            class="appearance-none  w-full py-2 px-1 border  text-gray-800 leading-tight focus:outline-none "
+                                                            type="text"
+                                                            x-model="objet"
+                                                            placeholder="Objet"
+                                                        >
+                                                        </div>
+
+                                                        <div class="mb-4">
+                                                            <label class="block text-gray-800 font-semibold mb-2" for="regcom">
+                                                            Message :
+                                                            </label>
+                                                            <textarea class="appearance-none border  w-full py-2 px-1 text-gray-800 leading-tight focus:outline-none " placeholder="Message" rows="6" cols="50" x-model="message">                            
+                                                            </textarea>
+                                                        </div>
+                                                    </div>
+                                                <div class="mt-8 text-right">
+                                                <button type="button" class="bg-white hover:bg-gray-100 text-[#EF0839] font-semibold py-2 px-4 border border-gray-300 rounded shadow-sm mr-2" @click="isOpen = false">
+                                                    Annuler
+                                                </button>	
+                                                <button type="button" class="bg-[#EF0839] hover:bg-[#EF0839] text-white font-semibold py-2 px-4 border border-[#EF0839] rounded shadow-sm"
+                                                    x-on:click="
+                                                    if (operation === 'add') {
+                                                        addFeedBack();
+                                                    } else if (operation === 'update') {
+                                                        modifierFeedBack();
+                                                    }
+                                                ">
+                                                <span x-text="operation === 'add' ? 'Envoyer' : 'Modifier'"></span>
+                                                </button>	
+                                                </div>
+                                                </div> 
+                                            </form>
+                                        </div>
+                                    </div>
+                            </div>
+                            <script>
+                                function salesView(){
+                                    return{
+                                        data_arry:{{listeFeedbacks | safe}},                                         
+                                        isOpen:false,
+                                        objet:'',
+                                        message:'',
+                                        feedbackID:'',
+                                        operation:'add',
+
+                                        /**** METHODS *****/
+                                        confirmDelete(idFeedback) {
+                                            // Display a confirmation dialog
+                                            this.feedbackID = idFeedback
+                                            var confirmation = confirm("Etes-vous Sûr De Vouloir Supprimer Ce FeedBack?");
+                                            
+                                            // If the user confirms, perform the deletion
+                                            if (confirmation) {
+                                                dataObj ={
+                                                    feedBackid: this.feedbackID,
+                                                }
+                                                axios.post('/home/supprimerFeedBack',dataObj, {
+                                                        headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRFToken': getCookie('csrftoken'),
+                                                        }
+                                                    })
+                                                .then(response => {
+                                                        alert("FeedBack Supprimé !");
+                                                        window.location.reload();                                                   
+                                                })
+                                                .catch(error => {
+                                                    // Handle request errors
+                                                alert('Une Erreur A été Surevenu! Veuillez Re-essayer Ulterieurement!');
+                                                });
+                                            } 
+                                        },    
+                                        addFeedBack(){ 
+                                            if (!this.message) {
+                                                alert('Veuillez Saisir votre Message.');
+                                                return;
+                                            } 
+                                            dataObj={
+                                            objet: this.objet,
+                                            message: this.message,
+                                            }
+                                            console.log(dataObj);
+                                            axios.post('', {
+                                                formData: dataObj
+                                            }, {
+                                                    headers: {
+                                                    'Content-Type': '',
+                                                    'X-CSRFToken': getCookie('csrftoken'),
+                                                    }
+                                                })
+                                                    .then((response) => {
+                                                    data = response.data
+                                                    if( data.error){
+                                                        alert(data.error);
+                                                    }else{
+                                                        alert("FeedBack Enregistrée!");
+                                                    }
+                                                    window.location.reload()            
+                                                    })
+                                                    .catch((error) => {
+                                                    alert(error)
+                                                    window.location.reload() 
+                                                });
+                                        },
+
+                                        confirmerSuppression() {
+                                                
+                                                this.showModal = false;
+                                                this.productReference = '';
+                                        },
+
+                                        annulerSuppression() {
+                                            // Réinitialiser les variables
+                                            this.showModal = false;
+                                            this.productReference = '';
+                                        },
+
+                                        modifierFeedBack(){
+                                            dataObj={
+                                                objet:this.objet,
+                                                message: this.message,
+                                                response: this.response,
+                                                feedBackid: this.feedbackID,
+                                            }
+
+                                            axios.post('/home/editFeedBack', dataObj, {
+                                            headers: {
+                                                'Content-Type': '',
+                                                'X-CSRFToken': getCookie('csrftoken'),
+                                            }
+                                            })
+                                            .then((response) => {
+                                                data = response.data
+                                                if( data.error){
+                                                        alert(data.error);
+                                                    }else{
+                                                        alert("Informations Modifié!");
+                                                    }
+                                                window.location.reload()            
+                                                })
+                                                .catch((error) => {
+                                                alert(error)
+                                                
+                                                });
+                                                var form = document.getElementById('myForm');
+                                                form.reset();
+                                        },
+                                    }
+                                }
+                                function getCookie(name) {
+                                    var cookieValue = null;
+                                    if (document.cookie && document.cookie !== '') {
+                                    var cookies = document.cookie.split(';');
+                                    for (var i = 0; i < cookies.length; i++) {
+                                        var cookie = cookies[i].trim();
+                                        // Does this cookie string begin with the name we want?
+                                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                        break;
+                                        }
+                                    }
+                                    }
+                                    return cookieValue;
+                                }
+                            </script>
+                        </section>
+                    </main>		
+                <!-- end Main content  -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

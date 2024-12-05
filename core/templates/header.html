@@ -1,0 +1,115 @@
+<div class="lg:pl-48 w-full mt-2 flex flex-col">
+    <!-- start::Topbar -->
+    <div class="flex flex-col px-4">
+        <header class="flex justify-between items-center h-16 py-4 px-4 rounded-xl bg-white shadow-lg">
+            <!-- start::Mobile menu button -->
+            <div class="mr-8 cursor-pointer" @click="menuOpen = true"  >
+<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+</svg>
+</div>
+            
+            <!-- end::Mobile menu button -->
+
+            <!-- start::Right side top menu -->
+            <div class="flex items-center">
+                <!-- start::Profile -->
+                <div 
+                    x-data="{ linkActive: false }"
+                    class="relative mr-4"                      
+                >
+                {% if request.session.role == 'Administrateur' %}
+                    <a 
+                        x-data="{ linkHover: false }"
+                        href="{% url 'users-page' %}"
+                        class="flex items-center justify-between py-2 px-3 rounded-full hover:bg-gray-100 bg-opacity-20"
+                        @mouseover="linkHover = true"
+                        @mouseleave="linkHover = false"
+                    >
+                        <div class="flex items-center">
+                            <svg id='People_24' width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><rect width='24' height='24' stroke='none' fill='#000000' opacity='0'/>
+                                <g transform="matrix(0.83 0 0 0.83 12 12)" >
+                                <path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" transform=" translate(-12, -12)" d="M 12 4 C 10.067003375592222 4 8.5 5.567003375592223 8.5 7.5 C 8.5 9.432996624407778 10.067003375592222 11 12 11 C 13.932996624407778 11 15.5 9.432996624407778 15.5 7.5 C 15.5 5.567003375592223 13.932996624407778 4 12 4 z M 4.5 7 C 3.1192881254230165 7 2 8.119288125423017 2 9.5 C 2 10.880711874576983 3.1192881254230165 12 4.5 12 C 5.880711874576983 12 7 10.880711874576983 7 9.5 C 7 8.119288125423017 5.880711874576983 7 4.5 7 z M 19.5 7 C 18.119288125423015 7 17 8.119288125423017 17 9.5 C 17 10.880711874576983 18.119288125423015 12 19.5 12 C 20.880711874576985 12 22 10.880711874576983 22 9.5 C 22 8.119288125423017 20.880711874576985 7 19.5 7 z M 12 13 C 9.664 13 5 14.173 5 16.5 L 5 20 L 19 20 L 19 16.5 C 19 14.173 14.336 13 12 13 z M 3.8984375 14.052734 C 2.3174375 14.296734 0 15.389078 0 16.705078 L 0 20 L 3 20 L 3 16.5 C 3 15.539 3.3454375 14.732734 3.8984375 14.052734 z M 20.101562 14.052734 C 20.654563 14.732734 21 15.539 21 16.5 L 21 20 L 24 20 L 24 16.705078 C 24 15.389078 21.682562 14.296734 20.101562 14.052734 z" stroke-linecap="round" />
+                                </g>
+                            </svg>
+                        </div>
+                    </a>
+                {% endif %}                 
+                </div>
+                <div 
+                    x-data="{ linkActive: false }"
+                    class="relative"                      
+                >
+                    <!-- start::Main link -->
+                    <div 
+                        @click="linkActive = !linkActive"
+                        class="cursor-pointer text-white font-bold p-2 uppercase bg-gradient-to-t to-[#ff0c3b] from-[#93291E] rounded-full"
+                    >
+                    {{ request.session.username|slice:":2" }}
+                    </div>
+                    <!-- end::Main link -->
+                    
+                    <!-- start::Submenu -->
+                    <div 
+                        x-show="linkActive"
+                        @click.away="linkActive = false"
+                        x-cloak
+                        class="absolute right-0 w-40 top-11 border border-gray-300 z-20"
+                    >
+                        <!-- start::Submenu content -->
+                        <div class="bg-white rounded">
+                            <!-- start::Submenu link -->
+                            <a 
+                                x-data="{ linkHover: false }"
+                                href="./../profile.html"
+                                class="flex items-center justify-between py-2 px-3 hover:bg-gray-100 bg-opacity-20"
+                                @mouseover="linkHover = true"
+                                @mouseleave="linkHover = false"
+                            >
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <div class="text-sm ml-3">
+                                        <p 
+                                            class="text-gray-600 font-bold capitalize"
+                                            :class=" linkHover ? 'text-primary' : ''"
+                                        >Profile</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- end::Submenu link -->
+                            
+                            
+                            
+                            <hr>
+
+                            <!-- start::Submenu link -->
+                            <form
+                                method=""logout
+                                action=""
+                                x-data="{ linkHover: false }"
+                                class="flex items-center justify-between py-2 px-3 hover:bg-gray-100 bg-opacity-20 cursor-pointer"
+                                @mouseover="linkHover = true"
+                                @mouseleave="linkHover = false"
+                            >
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                    <a 
+                                        class="text-sm ml-3 text-gray-600 font-bold capitalize "
+                                        href="{% url 'logout' %}"
+                                    >
+                                        Déconnexion
+                                    </a>
+                                </div>
+                            </form>
+                            <!-- end::Submenu link -->
+                        </div>
+                        <!-- end::Submenu content -->
+                    </div>
+                    <!-- end::Submenu -->
+                </div>
+                <!-- end::Profile -->
+            </div>
+            <!-- end::Right side top menu -->
+        </header>
+    </div>
+    <!-- end::Topbar -->

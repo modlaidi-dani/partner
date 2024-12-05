@@ -1,0 +1,58 @@
+def clients_to_json(request):
+    clients = models.Client.objects.annotate(bon_count=Count('client_bonS')).filter(
+        categorie_client__type_desc='Revendeur', 
+        bon_count__gt=5,
+        store__id = 1
+    )
+
+    clients_data = []
+
+    for client in clients:
+            reglements = [{
+                "codeReglement": reglement.codeReglement,
+                "dateReglement": reglement.dateReglement.strftime('%Y-%m-%d'),
+                "montant": float(reglement.montant)
+            } for reglement in client.client_reglements.all()]
+            monthly_cap = defaultdict(float)
+
+            # Loop through each BonSortie and sum the totalPrice (which is a property) for each month
+            for bon in client.client_bonS.all():
+                month_key = bon.dateBon.strftime('%Y-%m')  # e.g., "2024-08"
+                monthly_cap[month_key] += float(bon.get_total_soldprice)  # Ensure float conversion
+            produits = [{
+                "reference_name": produit.stock.name,
+                "num_series": produit.getnumSeries,
+                "quantity": produit.quantity,
+                "codeBl": produit.BonNo.idBon,
+                "dateBl": produit.BonNo.dateBon.strftime('%Y-%m-%d')
+            } for bon in client.client_bonS.all() for produit in bon.produits_en_bon_sorties.all()]
+
+            client_data = {
+                "name": client.name,
+                "adresse": client.adresse,
+                "phone": client.phone,
+                "email": client.email,
+                "sourceClient": client.sourceClient,
+                "categorie_client": client.categorie_client.id if client.categorie_client else None,
+                "registreCommerce": client.registreCommerce,
+                "Nif": client.Nif,
+                "Nis": client.Nis,
+                "num_article": client.num_article,
+                "region_client": client.region_client,
+                "solde": float(client.solde),
+                "store": client.store.id if client.store else None,
+                "user": client.user.id if client.user else None,
+                "total_amount": float(client.total_amount),
+                "total_rembourse": float(client.total_rembourse),
+                "total_annule": float(client.total_annule),
+                "remaining_amount": float(client.remaining_amount),
+                "total_paid_amount": float(client.total_paid_amount),
+                "capermonth": monthly_cap,
+                "reglements": reglements,
+                "bought_products": produits
+            }
+            
+            clients_data.append(client_data)
+
+    with open('clients_data.json', 'w') as json_file:
+        json.dump(clients_data, json_file, indent=4)

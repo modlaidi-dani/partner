@@ -1,0 +1,480 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div 
+    x-data="{ 
+        menuOpen: false, 
+        basicSignInModal: false,
+        basicSignUpModal: false,
+        advanceSignInModal: false,
+        advanceSignUpModal: false,
+    }" 
+    class="w-full"
+    >
+    <!-- start::Black overlay -->
+    <div :class="menuOpen ? 'block' : 'hidden'" @click="menuOpen = false" class="fixed  inset-0 bg-white opacity-50 transition-opacity lg:hidden"></div>
+    <!-- end::Black overlay -->
+    {% include 'header.html' %}
+        <div class="w-full flex flex-row">
+            {% include "sidebar.html" %}
+            <div class="h-screen w-full bg-center"  >
+                <!-- Main content header -->
+                    <main class="w-full overflow-hidden h-screen bg-white/50 ">
+                        <section 
+                            class="sales" 
+                            id="sales-view"
+                            x-data="salesView">
+                            <div class="w-full bg-auto bg-no-repeat bg-center">
+                                <div class="">
+                                    <div class="">
+                                        <h3 class="text-3xl uppercase  font-bold text-primary">Page de Liste des Clients</h3>
+                                    </div>  
+                                    <div class="py-2 mt-4 flex flex-wrap flex-grow justify-between border-b border-t px-2">  
+                                        <div class="relative mr-4 inline-block" x-data="{showTooltip1 :false}">
+                                            <label class="text-red-500 cursor-pointer w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-300 inline-flex items-center justify-center" @mouseenter="showTooltip1 = true" @mouseleave="showTooltip1 = false">
+                                              <svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+                                              </svg>	  
+                                              <input type="file" class="hidden" accept=".xlsx" x-ref="fileInput" x-on:change="handleFileChange">
+                                            </label>
+                                            <div x-show.transition="showTooltip1" class="z-40 shadow-lg text-center w-32 block absolute left-0 top-0 p-2 mt-12 rounded-lg bgGradient text-white text-xs">
+                                              Affecter Les remises!
+                                            </div>
+                                      </div> 
+                                        <div id= "gradientButton" class="inline-block px-8 py-2 h-10 text-sm leading-5 font-medium rounded-md gradientButton hover: text-white hover:shadow-inner focus:outline-none focus:shadow-outline cursor-pointer">
+                                           <div id="translate"></div>
+                                           <a x-on:click="isOpen = true; operation = 'add';">Ajouter Un Client</a> 
+                                        </div>
+                                    </div>  
+                                   
+                                    <div class="flex flex-wrap -mx-3 ">
+                                        <div class="flex-none w-full max-w-full px-3 ">
+                                            <div class="  relative flex flex-col min-w-0 mb-6 break-words  border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
+                                                <div class="flex-auto px-0 pt-0 pb-2">
+                                                    <div class="rounded-lg px-2 py-4 h-screen overflow-x-auto custom-scrollbar mb-12 bg-white/30 bg-center bg-no-repeat">
+                                                        <table class="items-center w-full  mb-0 align-top border-gray-200 text-black  backdrop-blur-sm bg-white/30" >
+                                                            <thead class="border-b bg-gray-100 text-gray-800 font-semibold">                      
+                                                                <td class="py-2 pl-2">
+                                                                    ID 
+                                                                </td>
+                                                                <td class="py-2 pl-2">
+                                                                    Nom Client
+                                                                </td>                                                               
+                                                                <td class="py-2 pl-2"></td>
+                                                            </thead>
+                                                            <tbody class="text-sm">
+                                                                <template x-for="(client, index) in data_arry">
+                                                                    <tr class=" hover:shadow-lg border transition duration-200">
+                                                                        <td class="py-3 pl-2" x-text="index + 1"></td>
+                                                                        <td class="py-3 pl-2 capitalize" x-text="client.name"></td>
+                                                                                                        
+                                                                        <td class="py-3 pl-2 flex items-center space-x-2">
+                                                                            <a class="cursor-pointer"
+                                                                                x-on:click=" 
+                                                                                    clientID = client.id; 
+                                                                                    type = client.type;
+                                                                                    name = client.name;
+                                                                                    phone = client.phone;
+                                                                                    adresse = client.adresse;
+                                                                                    region_client = client.region_client;
+                                                                                    Nif = client.Nif;
+                                                                                    Nis = client.Nis;
+                                                                                    num_article = client.num_article;
+                                                                                    username = client.username;
+                                                                                    operation= 'update'; 
+                                                                                    isOpen = true;
+                                                                                ">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500 hover:text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                                                </svg>
+                                                                            </a>
+                                                                            <a class="cursor-pointer" @click.prevent="confirmDelete(client.id)">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500 hover:text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                                                </svg>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </template>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style=" background-color: rgba(0, 0, 0, 0.8); " class="fixed z-40 top-0 right-0 left-0 bottom-0 h-full w-full overflow-y-scroll" x-cloak x-show.transition.opacity="isOpen">
+                                        <div class="p-4 max-w-xl mx-auto relative left-0 right-0 overflow-hidden mt-0 md:mt-12">
+                                            <div class="shadow absolute right-0 top-0 w-10 h-10 rounded-full z-20 backdrop-blur-md bg-white/30 text-gray-500 hover:text-gray-800 inline-flex items-center justify-center cursor-pointer"
+                                                x-on:click="isOpen = false">
+                                                <svg class="fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                <path
+                                                    d="M16.192 6.344L11.949 10.586 7.707 6.344 6.293 7.758 10.535 12 6.293 16.242 7.707 17.656 11.949 13.414 16.192 17.656 17.606 16.242 13.364 12 17.606 7.758z" />
+                                                </svg>
+                                            </div>
+                                            <form action="" id="myForm">
+                                                <div class="shadow w-full rounded-lg backdrop-blur-md bg-white/80 overflow-hidden block p-8">		
+                                                <h2 class="text-2xl mb-6 text-gray-800 uppercase border-b pb-2">Ajouter Un Client</h2>
+                                                    <div class="form-input">
+                                                        <div class="mb-4">
+                                                            <label class="block text-gray-800 font-semibold mb-2" for="type">
+                                                                Type Utilisateur:
+                                                            </label>
+                                                            <select
+                                                                class="appearance-none  w-full py-2 px-1 border  text-gray-800 leading-tight focus:outline-none "
+                                                                type="text"
+                                                                x-model="type"
+                                                            >
+                                                                <option value="">Aucun</option>
+                                                                <option value="client">Client</option>
+                                                                <option value="Administrateur">Administrateur</option>
+                                                            </select>
+                                                        </div>
+                                                        <div x-show="type == 'client'">
+                                                            <div class="flex items-center space-x-2">
+                                                                <div class="mb-4">
+                                                                    <label class="block text-gray-800 font-semibold mb-2" for="name">
+                                                                        Name:
+                                                                    </label>
+                                                                    <input
+                                                                        class="appearance-none  w-full py-2 px-1 border  text-gray-800 leading-tight focus:outline-none "
+                                                                        type="text"
+                                                                        x-model="name"
+                                                                        placeholder="Name"
+                                                                    >
+                                                                </div>                                                        
+                                                                
+                                                                <div class="mb-4">
+                                                                    <label class="block text-gray-800 font-semibold mb-2" for="phone">
+                                                                        Phone:
+                                                                    </label>
+                                                                    <input
+                                                                        class="appearance-none  w-full py-2 px-1 border  text-gray-800 leading-tight focus:outline-none "
+                                                                        type="text"
+                                                                        x-model="phone"
+                                                                        placeholder="Phone"
+                                                                    >
+                                                                </div>
+                                                            </div>  
+                                                            <div class="flex items-center space-x-2">
+                                                                <div class="mb-4">
+                                                                    <label class="block text-gray-800 font-semibold mb-2" for="adresse">
+                                                                        Adresse:
+                                                                    </label>
+                                                                    <input
+                                                                        class="appearance-none  w-full py-2 px-1 border  text-gray-800 leading-tight focus:outline-none "
+                                                                        type="text"
+                                                                        x-model="adresse"
+                                                                        placeholder="Adresse"
+                                                                    >
+                                                                </div>
+                                                                <div class="mb-4">
+                                                                    <label class="block text-gray-800 font-semibold mb-2" for="region_client">
+                                                                        Region Client:
+                                                                    </label>
+                                                                    <input
+                                                                        class="appearance-none  w-full py-2 px-1 border  text-gray-800 leading-tight focus:outline-none "
+                                                                        type="text"
+                                                                        x-model="region_client"
+                                                                        placeholder="Region Client"
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex items-center space-x-2">
+                                                                <div class="mb-4">
+                                                                    <label class="block text-gray-800 font-semibold mb-2" for="Nif">
+                                                                        Nif:
+                                                                    </label>
+                                                                    <input
+                                                                        class="appearance-none  w-full py-2 px-1 border  text-gray-800 leading-tight focus:outline-none "
+                                                                        type="text"
+                                                                        x-model="Nif"
+                                                                        placeholder="Nif"
+                                                                    >
+                                                                </div>
+                                                                
+                                                                <div class="mb-4">
+                                                                    <label class="block text-gray-800 font-semibold mb-2" for="Nis">
+                                                                        Nis:
+                                                                    </label>
+                                                                    <input
+                                                                        class="appearance-none  w-full py-2 px-1 border  text-gray-800 leading-tight focus:outline-none "
+                                                                        type="text"
+                                                                        x-model="Nis"
+                                                                        placeholder="Nis"
+                                                                    >
+                                                                </div>
+                                                                
+                                                                <div class="mb-4">
+                                                                    <label class="block text-gray-800 font-semibold mb-2" for="num_article">
+                                                                        Num Article:
+                                                                    </label>
+                                                                    <input
+                                                                        class="appearance-none  w-full py-2 px-1 border  text-gray-800 leading-tight focus:outline-none "
+                                                                        type="text"
+                                                                        x-model="num_article"
+                                                                        placeholder="Num Article"
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        
+                                                        <div class="mb-4">
+                                                            <label class="block text-gray-800 font-semibold mb-2" for="username">
+                                                                Username:
+                                                            </label>
+                                                            <input
+                                                                class="appearance-none  w-full py-2 px-1 border  text-gray-800 leading-tight focus:outline-none "
+                                                                type="text"
+                                                                x-model="username"
+                                                                placeholder="Username"
+                                                            >
+                                                        </div>
+                                                        
+                                                        <div class="mb-4">
+                                                            <label class="block text-gray-800 font-semibold mb-2" for="password">
+                                                                Password:
+                                                            </label>
+                                                            <input
+                                                                class="appearance-none  w-full py-2 px-1 border  text-gray-800 leading-tight focus:outline-none "
+                                                                type="password"
+                                                                x-model="password"
+                                                                placeholder="Password"
+                                                            >
+                                                            <p  x-show="operation == 'update'" class="text-red-500">Veuillez Ré-saisir le mot de passe que dans le cas de changement.</p>
+
+                                                        </div>
+                                                        
+                                                    </div>
+                                                <div class="mt-8 text-right">
+                                                <button type="button" class="bg-white hover:bg-gray-100 text-[#EF0839] font-semibold py-2 px-4 border border-gray-300 rounded shadow-sm mr-2" @click="isOpen = false">
+                                                    Annuler
+                                                </button>	
+                                                <button type="button" class="bg-[#EF0839] hover:bg-[#EF0839] text-white font-semibold py-2 px-4 border border-[#EF0839] rounded shadow-sm"
+                                                    x-on:click="
+                                                    if (operation === 'add') {
+                                                        addclient();
+                                                    } else if (operation === 'update') {
+                                                        modifierclient();
+                                                    }
+                                                ">
+                                                <span x-text="operation === 'add' ? 'Enregistrer' : 'Modifier'"></span>
+                                                </button>	
+                                                </div>
+                                                </div> 
+                                            </form>
+                                        </div>
+                                    </div>
+                            </div>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+                            <script>
+                                function salesView(){
+                                    return{
+                                        data_arry:{{listeClients | safe}},                                         
+                                        isOpen:false,
+                                        clientID:'',
+                                        operation:'add',
+                                        name: '',
+                                        adresse: '',
+                                        phone: '',
+                                        Nif: '',
+                                        Nis: '',
+                                        num_article: '',
+                                        region_client: '',
+                                        type: '',
+                                        username: '',
+                                        password: '',
+                                        /**** METHODS *****/
+                                        confirmDelete(idclient) {
+                                            // Display a confirmation dialog
+                                            this.clientID = idclient
+                                            var confirmation = confirm("Etes-vous Sûr De Vouloir Supprimer Ce client?");
+                                            
+                                            // If the user confirms, perform the deletion
+                                            if (confirmation) {
+                                                dataObj ={
+                                                    clientid: this.clientID,
+                                                }
+                                                axios.post('/home/supprimerclient',dataObj, {
+                                                        headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRFToken': getCookie('csrftoken'),
+                                                        }
+                                                    })
+                                                .then(response => {
+                                                        alert("client Supprimé !");
+                                                        window.location.reload();                                                   
+                                                })
+                                                .catch(error => {
+                                                    // Handle request errors
+                                                alert('Une Erreur A été Surevenu! Veuillez Re-essayer Ulterieurement!');
+                                                });
+                                            } 
+                                        },    
+                                        addclient(){ 
+                                            dataObj={
+                                                name: this.name,
+                                                adresse: this.adresse,
+                                                phone: this.phone,
+                                                Nif: this.Nif,
+                                                Nis: this.Nis,
+                                                num_article: this.num_article,
+                                                region_client: this.region_client,
+                                                type: this.type,
+                                                username: this.username,
+                                                password: this.password,
+                                            }
+                                            axios.post('', {
+                                                formData: dataObj
+                                            }, {
+                                                headers: {
+                                                'Content-Type': '',
+                                                'X-CSRFToken': getCookie('csrftoken'),
+                                                }
+                                            })
+                                                .then((response) => {
+                                                    data = response.data
+                                                    if( data.error){
+                                                        alert(data.error);
+                                                    }else{
+                                                        alert("client Enregistrée!");
+                                                    }
+                                                    window.location.reload()            
+                                                })
+                                                .catch((error) => {
+                                                    alert(error)
+                                                    window.location.reload() 
+                                            });
+                                        },
+
+                                        confirmerSuppression() {
+                                                
+                                                this.showModal = false;
+                                                this.productReference = '';
+                                        },
+
+                                        annulerSuppression() {
+                                            // Réinitialiser les variables
+                                            this.showModal = false;
+                                            this.productReference = '';
+                                        },
+
+                                        modifierclient(){
+                                            dataObj={
+                                                name: this.name,
+                                                adresse: this.adresse,
+                                                phone: this.phone,
+                                                Nif: this.Nif,
+                                                Nis: this.Nis,
+                                                clientid: this.clientID,
+                                                num_article: this.num_article,
+                                                region_client: this.region_client,
+                                                type: this.type,
+                                                username: this.username,
+                                                password: this.password,                                             
+                                            }
+
+                                            axios.post('/home/editClient/', dataObj, {
+                                            headers: {
+                                                'Content-Type': '',
+                                                'X-CSRFToken': getCookie('csrftoken'),
+                                            }
+                                            })
+                                            .then((response) => {
+                                                data = response.data
+                                                if( data.error){
+                                                        alert(data.error);
+                                                    }else{
+                                                        alert("Informations Modifié!");
+                                                    }
+                                                window.location.reload()            
+                                                })
+                                                .catch((error) => {
+                                                alert(error)
+                                                
+                                                });
+                                                var form = document.getElementById('myForm');
+                                                form.reset();
+                                        },
+
+                                        handleFileChange(event) {
+                                            const file = event.target.files[0];
+                                            if (file) {
+                                              const reader = new FileReader();
+                                              reader.onload = (e) => {
+                                                const data = new Uint8Array(e.target.result);
+                                                const workbook = XLSX.read(data, { type: 'array' });
+                                                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                                                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                                                var remise_import = []    
+                                                for (let i = 1; i < jsonData.length; i++) {
+                                                  if (jsonData[i][0]) {
+                                                    remise_import.push({
+                                                        Client: jsonData[i][2],
+                                                        IDBon: jsonData[i][1],
+                                                        DateBon: jsonData[i][0],
+                                                        MontantTTC: jsonData[i][3],
+                                                        remiseTTC: jsonData[i][4],                                       
+                                                    });
+                                                  }
+                                                }
+                                                dataObj ={
+                                                remises : remise_import,                        
+                                              }
+                                              axios.post('/home/ImportRemises/',dataObj, {
+                                                headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRFToken': getCookie('csrftoken'),
+                                                }
+                                              })
+                                                .then(response => {
+                                                  // Check if the deletion was successful
+                                                  if (response.data.success) {            			
+                                                    showModal = false;
+                                                    alert(response.data.message);
+                                                    window.location.reload();
+                                                  } else {
+                                                    alert(response.data.message);
+                                                  }
+                                                })
+                                              .catch(error => {
+                                              // Handle request errors
+                                              alert(error);
+                                              });
+                                              };
+                                              
+                                              reader.readAsArrayBuffer(file);
+                                              this.$refs.fileInput.value = '';
+                                              
+                                            }
+                                        },  
+                                    }
+                                }
+                                function getCookie(name) {
+                                    var cookieValue = null;
+                                    if (document.cookie && document.cookie !== '') {
+                                    var cookies = document.cookie.split(';');
+                                    for (var i = 0; i < cookies.length; i++) {
+                                        var cookie = cookies[i].trim();
+                                        // Does this cookie string begin with the name we want?
+                                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                        break;
+                                        }
+                                    }
+                                    }
+                                    return cookieValue;
+                                }
+                            </script>
+                        </section>
+                    </main>		
+                <!-- end Main content  -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

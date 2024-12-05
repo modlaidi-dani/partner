@@ -1,0 +1,399 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div 
+    x-data="{ 
+        menuOpen: false, 
+        basicSignInModal: false,
+        basicSignUpModal: false,
+        advanceSignInModal: false,
+        advanceSignUpModal: false,
+    }" 
+    class="w-full"
+    >
+    <!-- start::Black overlay -->
+    <div :class="menuOpen ? 'block' : 'hidden'" @click="menuOpen = false" class="fixed  inset-0 bg-white opacity-50 transition-opacity lg:hidden"></div>
+    <!-- end::Black overlay -->
+    {% include 'header.html' %}
+        <div class="w-full flex flex-row">
+            {% include "sidebar.html" %}
+            <div class="h-screen w-full">
+                <!-- Main content header -->
+                    <main class="w-full h-full overflow-hidden" >
+                       <section 
+                            class="sales" 
+                            id="sales-view"
+                            x-data="salesView">
+                            <div class="w-full px-4 bg-auto bg-no-repeat bg-center">
+                                <div class="">
+                                    <div class="py-2 mt-4 flex flex-wrap flex-grow justify-between border-b px-2">  
+                                        <div>
+                                            <h3 class="text-3xl uppercase font-bold text-primary">Etat de Garantie </h3>
+                                        </div>  
+                                        <div id= "gradientButton" class="inline-block px-8 py-2 h-10 text-sm leading-5 font-medium rounded-md gradientButton hover: text-white hover:shadow-inner focus:outline-none focus:shadow-outline cursor-pointer">
+                                           <div id="translate"></div>
+                                           <a x-on:click="isOpen = true; operation = 'add';">Ajouter Une Garantie</a> 
+                                        </div>
+                                    </div> 
+                                    <div class="flex flex-wrap -mx-3 " >
+                                        <div class="flex-none w-full max-w-full backdrop-blur-sm ">
+                                            <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white/30 border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
+                                                <div class="flex-auto px-0 pt-0 pb-2">
+                                                    <!-- start::Advance Table Manage Icons -->
+                                                    <div class="rounded-lg px-2 py-4 h-screen overflow-x-auto custom-scrollbar mb-12  backdrop-blur-sm bg-white/30 bg-center bg-no-repeat" style="background-image:url('{% static 'images/scan.png' %}');">
+                                                        <table class="items-center overflow-hidden w-full  mb-0 align-top border-gray-200 text-black " >
+                                                            <thead class="align-bottom border-b-2 bg-gray-100">                     
+                                                                <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                    Reference
+                                                                </td>
+                                                                <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                    Designation
+                                                                </td>
+                                                                <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                    Numéros de Série
+                                                                </td>
+                                                                <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                    Date Debut Garantie
+                                                                </td>                                                                                                                        
+                                                                <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70">
+                                                                    Etat
+                                                                </td>                                                                                                                            
+                                                                <td class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-gray-800 opacity-70"></td>
+                                                            </thead>
+                                                            <tbody class="text-sm bg-center py-4" >
+                                                                <template x-for="(Garantie, index) in data_arry">
+                                                                    <tr class="hover:shadow-lg border-b transition duration-200">
+                                                                        <td class="py-3 pl-2 text-center" x-text="Garantie.ProduitReference"></td>
+                                                                        <td class="py-3 pl-2 text-center" x-text="Garantie.ProduitName"></td>
+                                                                        <td class="py-3 pl-2 text-center" x-text="Garantie.numseries"></td>
+                                                                        <td class="py-3 pl-2 text-center capitalize" x-text="Garantie.dateGarantie"></td>                                                                       
+                                                                        <td class="py-3 pl-2 text-center" x-text="Garantie.etat"></td>                                                           
+                                                                        <td class="py-3 pl-2 flex items-center space-x-2">
+                                                                            <a class="cursor-pointer" x-on:click="item.ref = Garantie.ProduitReference; item.name = Garantie.ProduitName; item.quantity = Garantie.qte; item.dateGarantie = Garantie.dategarantie; item.numseries = Garantie.ProduitNumSerie; operation= 'update'; isOpen = true;">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-500 hover:text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                                                </svg>
+                                                                            </a>
+                                                                            <a @click.prevent="confirmDelete(Garantie.id)">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500 hover:text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                                                </svg>
+                                                                            </a>
+                                                                        </td>                                                              
+                                                                    </tr>
+                                                                </template>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- end::Advance Table Manage Icons -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                                <div style=" background-color: rgba(0, 0, 0, 0.8); " class="fixed z-40 top-0 right-0 left-0 bottom-0 h-full w-full overflow-y-scroll" x-cloak x-show.transition.opacity="isOpen">
+                                        <div class="p-4 max-w-xl mx-auto relative left-0 right-0 overflow-hidden mt-0 md:mt-12">
+                                            <div class="shadow absolute right-0 top-0 w-10 h-10 rounded-full backdrop-blur-md bg-white/30 text-gray-500 hover:text-gray-800 inline-flex items-center justify-center cursor-pointer z-20"
+                                                x-on:click="isOpen = false">
+                                                <svg class="fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                <path
+                                                    d="M16.192 6.344L11.949 10.586 7.707 6.344 6.293 7.758 10.535 12 6.293 16.242 7.707 17.656 11.949 13.414 16.192 17.656 17.606 16.242 13.364 12 17.606 7.758z" />
+                                                </svg>
+                                            </div>
+                                            <form action="" id="myForm">
+                                                <div class="shadow w-full rounded-lg backdrop-blur-md bg-white/80 overflow-hidden block p-8">		
+                                                <h2 class="text-2xl mb-6 text-gray-800 border-b pb-2">Ajouter Une Garantie</h2>
+                                                    <div class="form-input">
+                                                        <div class="mb-4 w-full ">			
+                                                            <label class="block text-gray-700 font-semibold mb-2" for="price">
+                                                                Produit :
+                                                            </label>
+
+                                                            <div class="relative">
+                                                                <input type="hidden" :value="selected.value">
+                                                                <input type="text" x-model="search" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline bg-gray-50 text-gray-600 font-medium"
+                                                                    placeholder="Cliquer pour rechercher ..." @click="optionsVisible = !optionsVisible">
+                                                                <div class="absolute bg-white shadow-lg w-full overflow-y-scroll z-40" style="max-height:200px;" x-show="optionsVisible">
+                                                                    <template x-for="option in filteredOptions()">
+                                                                        <a class="cursor-pointer border-b py-2 px-2 text-left hover:bg-gray-100" 
+                                                                            @click.prevent="
+                                                                                item.ref = option.reference;
+                                                                                item.name = option.name;
+                                                                                showQuantity = true;
+                                                                                availableQuantity = option.quantity;
+                                                                                item.rate = option.prix;
+                                                                                selected = option;
+                                                                                optionsVisible = false;
+                                                                                search='';
+
+                                                                                "
+                                                                            x-text="option.name"
+                                                                            style="display: block;"></a>
+                                                                    </template>
+                                                                </div>
+                                                                
+                                                            </div>
+
+                                                            <select
+                                                                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                                id="product"
+                                                                name="product"
+                                                                x-model="item.ref"
+                                                                required
+                                                                disabled  
+                                                                >
+                                                                <option value="" disabled selected>produit</option>
+                                                                <template x-for="stock_item in stocks">
+                                                                    <option
+                                                                        x-bind:value="stock_item.reference"
+                                                                        x-text="stock_item.name"
+                                                                    >
+
+                                                                    </option>
+                                                                </template>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-4">
+                                                            <label class="block text-gray-700 font-semibold mb-2" for="quantity">
+                                                                Quantity:
+                                                                <div class="mb-4" id="productQuantityDiv" style="display: none;" x-show="showQuantity">
+                                                                <label class="block text-primary font-medium text-sm mb-2">
+                                                                    Quantité Acheté: <span id="productQuantity" x-text="availableQuantity"></span>
+                                                                </label>
+                                                                </div>
+                                                            </label>
+                                                            <input
+                                                                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                                type="number"
+                                                                id="quantity"
+                                                                name="quantity"
+                                                                placeholder="Enter quantity"
+                                                                min="1"
+                                                                max="5"
+                                                                required
+                                                                x-model="item.quantity"
+                                                            >
+                                                            
+                                                        </div>	 
+
+                                                        <div class="mb-4">
+                                                            <label class="block text-gray-700 font-semibold mb-2" for="price">
+                                                                Prix:
+                                                            </label>
+                                                            <input
+                                                                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                                type="text"
+                                                                id="price"
+                                                                name="price"
+                                                                placeholder="Le prix sera affiché automatiquement"
+                                                                x-model="item.rate"
+                                                              
+                                                            >
+										                </div>
+                                                        <div class="mb-4">
+                                                            <label class="block text-gray-700 font-semibold mb-2" for="price">
+                                                                Numero(s) de series:
+                                                            </label>
+                                                            <input
+                                                                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                                type="text"
+                                                                placeholder="Numero(s) de series"
+                                                                x-model="item.numseries"
+
+                                                            >
+                                                            <p class="text-red-500 text-xs">En cas de plusieurs numéros de série, séparer les par des virgules.</p>
+										                </div>
+                                                    </div>
+                                                <div class="mt-8 text-right">
+                                                <button type="button" class="bg-white hover:bg-gray-100 text-[#EF0839] font-semibold py-2 px-4 border border-gray-300 rounded shadow-sm mr-2" @click="isOpen = false">
+                                                    Annuler
+                                                </button>	
+                                                <button type="button" class="bg-[#EF0839] hover:bg-[#EF0839] text-white font-semibold py-2 px-4 border border-[#EF0839] rounded shadow-sm"
+                                                    x-on:click="
+                                                    if (operation === 'add') {
+                                                        addGarantie();
+                                                    } else if (operation === 'update') {
+                                                        modifierGarantie();
+                                                    }
+                                                ">
+                                                <span x-text="operation === 'add' ? 'Envoyer' : 'Modifier'"></span>
+                                                </button>	
+                                                </div>
+                                                </div> 
+                                            </form>
+                                        </div>
+                                    </div>
+                            </div>
+                            <script>
+                                function salesView(){
+                                    return{
+                                        data_arry:{{ garanties | safe }}, 
+                                        isOpen: false,
+                                        operation: 'add',
+                                        optionsVisible: false,
+                                        search: "",
+                                        availableQuantity:0,
+                                        showQuantity:false,
+                                        idGarantie:'',
+                                        confirmDelete(idGarantie) {
+                                            // Display a confirmation dialog
+                                            this.idGarantie = idGarantie
+                                            var confirmation = confirm("Etes-vous Sûr De Vouloir Supprimer Cette demande de Garantie?");
+                                            console.log(idGarantie)
+                                            // If the user confirms, perform the deletion
+                                            if (confirmation) {
+                                                dataObj ={
+                                                    idGarantie: this.idGarantie,
+                                                }
+                                                axios.post('/home/supprimerGarantie',dataObj, {
+                                                        headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRFToken': getCookie('csrftoken'),
+                                                        }
+                                                    })
+                                                .then(response => {
+                                                        alert("Demande de Garantie Supprimé !");
+                                                        window.location.reload();                                                   
+                                                })
+                                                .catch(error => {
+                                                    // Handle request errors
+                                                alert('Une Erreur A été Surevenu! Veuillez Re-essayer Ulterieurement!');
+                                                });
+                                            } 
+                                        },    
+                                        stocks :{{stocks | safe}}, 
+                                        item:{
+                                            ref: "",
+                                            name: "",
+                                            rate: "",
+                                            quantity: "",
+                                            numseries: "",
+                                            cause: "",
+                                        },
+                                        
+                                        filteredOptions() {
+                                                return this.stocks.filter((option) => {
+                                                    return (option.name.toLowerCase().includes(this.search.toLowerCase()));
+                                                });
+                                        },
+                                        addGarantie(){ 
+                                            dataObj={
+                                                item: this.item,
+                                            }
+                                            axios.post('', {
+                                                formData: dataObj
+                                            }, {
+                                                    headers: {
+                                                    'Content-Type': '',
+                                                    'X-CSRFToken': getCookie('csrftoken'),
+                                                    }
+                                                })
+                                                    .then((response) => {
+                                                    data = response.data
+                                                    if( data.error){
+                                                        alert(data.error);
+                                                    }else{
+                                                        alert("Demande Garantie Enregistrée!");
+                                                    }
+                                                    window.location.reload()            
+                                                    })
+                                                    .catch((error) => {
+                                                    alert(error)
+                                                    window.location.reload() 
+                                                });
+                                        },
+
+                                        confirmerSuppression() {
+                                                dataObj ={
+                                                        user_id: this.id_heure,
+                                                        
+                                                }
+                                                axios.post('supprimerDemandeGarantie/',dataObj, {
+                                                        headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRFToken': getCookie('csrftoken'),
+                                                        }
+                                                    })
+                                                .then(response => {
+                                                // Check if the deletion was successful
+                                                    if (response.data.success) {            			
+                                                        showModal = false;
+                                                        alert("Demande Garantie Supprimé !");
+                                                        window.location.reload();
+                                                    } else {
+                                                        alert(response.data.error);
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                    // Handle request errors
+                                                    alert(error);
+                                                });
+                                                this.showModal = false;
+                                                this.productReference = '';
+                                        },
+
+                                        annulerSuppression() {
+                                            // Réinitialiser les variables
+                                            this.showModal = false;
+                                            this.productReference = '';
+                                        },
+
+                                        modifierGarantie(){
+                                            dataObj={
+                                                datetimedeb: this.datetimedeb,
+                                                salarie: this.salarie,
+                                                motif: this.motif,
+                                                datetimefin: this.datetimefin,
+                                                tauxHeure: this.HeureSuppTaux(),
+                                                user_id: this.id_heure,
+                                            }
+
+                                            axios.post('editDemandeGarantie/', dataObj, {
+                                            headers: {
+                                                'Content-Type': '',
+                                                'X-CSRFToken': getCookie('csrftoken'),
+                                            }
+                                            })
+                                            .then((response) => {
+                                                data = response.data
+                                                if( data.error){
+                                                        alert(data.error);
+                                                    }else{
+                                                        alert("Informations Modifié!");
+                                                    }
+                                                window.location.reload()            
+                                                })
+                                                .catch((error) => {
+                                                alert(error)
+                                                
+                                                });
+                                                var form = document.getElementById('myForm');
+                                                form.reset();
+                                        },
+                                    }
+                                }
+                                function getCookie(name) {
+                                    var cookieValue = null;
+                                    if (document.cookie && document.cookie !== '') {
+                                    var cookies = document.cookie.split(';');
+                                    for (var i = 0; i < cookies.length; i++) {
+                                        var cookie = cookies[i].trim();
+                                        // Does this cookie string begin with the name we want?
+                                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                        break;
+                                        }
+                                    }
+                                    }
+                                    return cookieValue;
+                                }
+                            </script>
+                        </section>
+                    </main>		
+                <!-- end Main content  -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

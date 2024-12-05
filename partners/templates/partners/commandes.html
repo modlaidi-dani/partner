@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div 
+    x-data="{ 
+        menuOpen: false, 
+        basicSignInModal: false,
+        basicSignUpModal: false,
+        advanceSignInModal: false,
+        advanceSignUpModal: false,
+    }" 
+    class="w-full"
+    >
+    <!-- start::Black overlay -->
+    <div :class="menuOpen ? 'block' : 'hidden'" @click="menuOpen = false" class="fixed  inset-0 bg-white opacity-50 transition-opacity lg:hidden"></div>
+    <!-- end::Black overlay -->
+    {% include 'header.html' %}
+        <div class="w-full flex flex-row">
+            {% include "sidebar.html" %}
+            <div class="h-screen w-full bg-center"  >
+                <!-- Main content header -->
+                    <main class="w-full overflow-hidden h-screen bg-white/50 ">
+                       <section 
+                            class="sales" 
+                            id="sales-view"
+                            x-data="salesView">
+                            <div class="w-full bg-auto bg-no-repeat bg-center">
+                                <div class="">
+                                    <div class="py-2 mt-4 flex flex-wrap flex-grow justify-between border-b px-2">  
+                                        <div>
+                                            <h3 class="text-3xl uppercase  font-bold text-primary">LISTE DES COMMANDES</h3>
+                                        </div>  
+                                        <div id= "gradientButton" class="inline-block px-8 py-2 h-10 text-sm leading-5 font-medium rounded-md gradientButton hover: text-white hover:shadow-inner focus:outline-none focus:shadow-outline cursor-pointer">
+                                           <div id="translate"></div>
+                                           <a href="{% url 'products-page' %}" >Nouvelle Commande</a> 
+                                        </div>
+                                    </div>  
+                                    <div class="flex flex-wrap -mx-3 ">
+                                        <div class="flex-none w-full max-w-full px-3 ">
+                                            <div class="  relative flex flex-col min-w-0 mb-6 break-words  border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
+                                                <div class="flex-auto px-0 pt-0 pb-2">
+                                                    <div class="rounded-lg px-2 py-4 h-screen overflow-x-auto custom-scrollbar mb-12 bg-white/30 bg-center bg-no-repeat" style="background-image:url('{% static 'images/bg_produits.png' %}');">
+                                                        <table class="items-center w-full  mb-0 align-top border-gray-200 text-black  backdrop-blur-sm bg-white/30" >
+                                                            <thead class="border-b bg-gray-100 text-gray-800 font-semibold">                      
+                                                                <td class="py-2 pl-2">
+                                                                    ID Commande
+                                                                </td>
+                                                                <td class="py-2 pl-2">
+                                                                    Date
+                                                                </td>
+                                                                <td class="py-2 pl-2">
+                                                                    Note
+                                                                </td>
+                                                                <td class="py-2 pl-2">
+                                                                    Status
+                                                                </td>
+                                                                <td class="py-2 pl-2"></td>
+                                                            </thead>
+                                                            <tbody class="text-sm">
+                                                                <template x-for="(commande, index) in data_arry">
+                                                                    <tr class=" hover:shadow-lg border transition duration-200">
+                                                                        <td class="py-3 pl-2" x-text="'#COMM'+index"></td>
+                                                                        <td class="py-3 pl-2 capitalize" x-text="commande.date"></td>
+                                                                        <td class="py-3 pl-2" x-text="commande.note"></td>
+                                                                        <td class="py-3 pl-2">
+                                                                            <span class="bg-green-500 px-1.5 py-0.5 rounded-lg text-gray-100" x-text="commande.etat"></span>
+                                                                        </td>                                  
+                                                                        <td class="py-3 pl-2 cursor-pointer flex items-center space-x-2">                                                                           
+                                                                            <a @click.prevent="confirmDelete(commande.id)">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500 hover:text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                                                </svg>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </template>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <script>
+                                function salesView(){
+                                    return{
+                                        data_arry:{{command_list | safe}},                                         
+                                        commandeID:'',
+
+                                        /**** METHODS *****/
+                                        confirmDelete(idcommande) {
+                                            // Display a confirmation dialog
+                                            this.commandeID = idcommande
+                                            var confirmation = confirm("Etes-vous Sûr De Vouloir Supprimer Cette Commande ?");
+                                            
+                                            // If the user confirms, perform the deletion
+                                            if (confirmation) {
+                                                dataObj ={
+                                                    commandeid: this.commandeID,
+                                                }
+                                                axios.post('/home/supprimerCommande',dataObj, {
+                                                        headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRFToken': getCookie('csrftoken'),
+                                                        }
+                                                    })
+                                                .then(response => {
+                                                        alert("Commande Supprimé !");
+                                                        window.location.reload();                                                   
+                                                })
+                                                .catch(error => {
+                                                    // Handle request errors
+                                                alert('Une Erreur A été Surevenu! Veuillez Re-essayer Ulterieurement!');
+                                                });
+                                            } 
+                                        },                                           
+                                    }
+                                }
+                                function getCookie(name) {
+                                    var cookieValue = null;
+                                    if (document.cookie && document.cookie !== '') {
+                                    var cookies = document.cookie.split(';');
+                                    for (var i = 0; i < cookies.length; i++) {
+                                        var cookie = cookies[i].trim();
+                                        // Does this cookie string begin with the name we want?
+                                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                        break;
+                                        }
+                                    }
+                                    }
+                                    return cookieValue;
+                                }
+                            </script>
+                        </section>
+                    </main>		
+                <!-- end Main content  -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
