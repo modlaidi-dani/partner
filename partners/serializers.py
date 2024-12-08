@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from django.contrib.auth.models import User,Group
+
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model=Group
@@ -38,3 +39,13 @@ class CommandeSerializer(serializers.ModelSerializer):
     class Meta:
         model=Commande
         fields=['etat_CHOICES', 'client', 'dateCommande', 'note', 'etatCommande','produits']
+class RemisesSerializer(serializers.ModelSerializer):
+    client=UserSerializer(many=True)
+    class Meta:
+        model=Remises
+        fields="__all__"
+class FeedBackSerializer(serializers.ModelSerializer):
+    client=UserSerializer(many=True)
+    class Meta:
+        model=FeedBack
+        fields="__all__"

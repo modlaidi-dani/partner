@@ -27,3 +27,13 @@ class ProduitEnCommandeViewSet(viewsets.ModelViewSet):
     authentication_classes=[JWTAuthentication] 
     serializer_class = ProduitEnCommandeSerializer
     permission_classes = [IsAuthenticated]
+class RemiseViewSet(viewsets.ModelViewSet):
+    queryset = Remises.objects.all()
+    authentication_classes=[JWTAuthentication] 
+    serializer_class = RemisesSerializer
+    permission_classes = [IsAuthenticated]
+class FeedBackViewSet(viewsets.ModelViewSet):
+    queryset = FeedBack.objects.all()
+    authentication_classes=[JWTAuthentication] 
+    serializer_class = FeedBackSerializer
+    permission_classes = [IsAuthenticated]
