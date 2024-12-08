@@ -6,6 +6,9 @@ router.register('user',UserViewSet)
 router.register('group',GroupViewSet)
 router.register('commande',CommandeViewSet)
 router.register('produitencommande',ProduitEnCommandeViewSet)
+router.register('remise',RemiseViewSet)
+router.register('FeedBack',FeedBackViewSet)
+
 
 
 urlpatterns = [
