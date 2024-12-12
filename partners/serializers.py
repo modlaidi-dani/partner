@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from django.contrib.auth.models import User,Group
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,9 +11,11 @@ class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True, read_only=True)  
     class Meta:
         model = User
-        fields = ['username', 'email', 'is_active', 'password', 'groups']
+        fields = ['id','username', 'email', 'is_active', 'password', 'groups']
         extra_kwargs = {
             'password': {'write_only': True},
+            'id': {'read_only': True},
+            
         }
 
     def create(self, validated_data):
@@ -49,3 +52,17 @@ class FeedBackSerializer(serializers.ModelSerializer):
     class Meta:
         model=FeedBack
         fields="__all__"
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+            token = super().get_token(user)
+            user_data = UserSerializer(user).data
+            token['user'] = user_data
+            print(token)
+            return token
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        user_data = UserSerializer(self.user).data
+        data['user'] = user_data  # Ajoutez les données utilisateur à la réponse
+        return data

@@ -98,6 +98,9 @@ DATABASES = {
     }
 }
 
+SIMPLE_JWT = {
+    'TOKEN_OBTAIN_SERIALIZER':'partners.serializers.CustomTokenObtainPairSerializer',
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

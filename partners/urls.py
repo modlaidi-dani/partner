@@ -12,5 +12,6 @@ router.register('FeedBack',FeedBackViewSet)
 
 
 urlpatterns = [
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('',include(router.urls)),
 ]
